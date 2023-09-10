@@ -10,35 +10,56 @@ function arrowsOverlap(arrow1, arrow2) {
     return false;
 }
 
-function detectOverlaps(instructions) {
-    let overlaps = [];
-    for (let i = 0; i < instructions.length; i++) {
-        for (let j = i + 1; j < instructions.length; j++) {
-            if (arrowsOverlap(instructions[i], instructions[j])) {
-                overlaps.push([i, j]);
-            }
-        }
-    }
-    return overlaps;
-}
 
 const overlapOffset = 0.05;  // Adjust as needed
 
-function adjustOverlappingArrows(instructions, overlaps) {
-    for (let [i, j] of overlaps) {
-        // Store the original y values
-        instructions[i].originalFromY = instructions[i].from.y;
-        instructions[i].originalToY = instructions[i].to.y;
-        instructions[j].originalFromY = instructions[j].from.y;
-        instructions[j].originalToY = instructions[j].to.y;
+function adjustArrowPositions(instructions) {
 
+    const overlaps = ((instructions)=>{
+        let overlaps = [];
+        for (let i = 0; i < instructions.length; i++) {
+            for (let j = i + 1; j < instructions.length; j++) {
+                if (arrowsOverlap(instructions[i], instructions[j])) {
+                    overlaps.push([i, j]);
+                }
+            }
+        }
+        return overlaps;
+    })(instructions);
+
+    for (let [i, j] of overlaps) {
         // Adjust for overlaps
-        instructions[i].from.y -= overlapOffset;
-        instructions[i].to.y -= overlapOffset;
-        instructions[j].from.y += overlapOffset;
-        instructions[j].to.y += overlapOffset;
+        instructions[i].from.y_shifted = instructions[i].from.y - overlapOffset;
+        instructions[i].to.y_shifted = instructions[i].to.y - overlapOffset;
+        instructions[j].from.y_shifted = instructions[j].from.y + overlapOffset;
+        instructions[j].to.y_shifted = instructions[j].to.y + overlapOffset;
     }
+    //for instructions that are not overlapping, set y_shifted to y
+    instructions.forEach(instruction => {
+        if (!instruction.to.hasOwnProperty("y_shifted")) {
+            instruction.from.y_shifted = instruction.from.y;
+            instruction.to.y_shifted = instruction.to.y;
+        }
+    });
+    return instructions;
 }
+
+function verticesPassingBy(instruction){
+    let vertices = [];
+    if (instruction.type === "N" || instruction.type === "L") {
+        for (let x = instruction.from.x; x <= instruction.to.x; x++) {
+            vertices.push({x, y: instruction.from.y});
+        }
+    } else if (instruction.type === "M") {
+        for (let x = instruction.from.x; x <= instruction.to.x; x++) {
+            vertices.push({x, y: instruction.from.y});
+            vertices.push({x, y: instruction.to.y});
+        }
+    }
+    return vertices;
+}
+
+
 
 function visualizeLattice(instructionsStr, element) {
     // Extract individual instructions using regex
@@ -92,8 +113,7 @@ function visualizeLattice(instructionsStr, element) {
         instructions.push({type, from, to});
     }
     
-    let overlaps = detectOverlaps(instructions);
-    adjustOverlappingArrows(instructions, overlaps);
+    adjustArrowPositions(instructions);
     
     // Set up SVG canvas
     const svgWidth = 500;  // Adjusted width
@@ -111,15 +131,36 @@ function visualizeLattice(instructionsStr, element) {
         {x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}
     ];
     
+
+    passedByVertices = [];
+    instructions.forEach(instruction => {
+        verticesPassingBy(instruction).forEach(vertex => {
+            if (!passedByVertices.some(v => v.x === vertex.x && v.y === vertex.y)) {
+                passedByVertices.push(vertex);
+            }
+        });
+    });
+
     
-    // Draw all the points as dimmed disks
     svg.selectAll("circle")
         .data(points)
         .enter().append("circle")
         .attr("cx", d => d.x * 120 - 100 + offsetX)
         .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
         .attr("r", 10)
-        .attr("fill", "#ccc");
+        .attr("fill", "#eeeeee");
+
+    svg.selectAll("circle")
+        .filter(d => passedByVertices.some(p => p.x === d.x && p.y === d.y))
+        .attr("fill", "#888");
+    // Draw passed by points as dimmed disks
+    // svg.selectAll("circle")
+    //     .data(passedByVertices)
+    //     .enter().append("circle")
+    //     .attr("cx", d => d.x * 120 - 100 + offsetX)
+    //     .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
+    //     .attr("r", 10)
+    //     .attr("fill", "#777");
 
     // Initialize the array to store the original arrow points for highlighting
     let originalArrowPoints = [];
@@ -132,17 +173,17 @@ function visualizeLattice(instructionsStr, element) {
         // Store the original points for highlighting
         originalArrowPoints.push({
             x: instruction.from.x,
-            y: instruction.originalFromY || instruction.from.y
+            y: instruction.from.y
         }, {
             x: instruction.to.x,
-            y: instruction.originalToY || instruction.to.y
+            y: instruction.to.y
         });
         const circleRadius = 10;
         const offsetDistance = circleRadius + 5;  // Radius + 5 units for offset
         const fromX = from.x * 120 - 100 + offsetX;
-        const fromY = svgHeight - from.y * 105 + offsetY;
+        const fromY = svgHeight - from.y_shifted * 105 + offsetY;
         const toX = to.x * 120 - 100 + offsetX;
-        const toY = svgHeight - to.y * 105 + offsetY;
+        const toY = svgHeight - to.y_shifted * 105 + offsetY;
 
         // Calculate direction vector
         const dx = toX - fromX;
