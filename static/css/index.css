@@ -2,9 +2,9 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
-h1{
-  text-transform: capitalize;
-}
+/* h1{
+  text-transform: none;
+} */
 
 
 .footer .icon-link {
