@@ -67,6 +67,16 @@ function visualizeLattice(instructionsStr, element) {
     let match;
     let instructions = [];
 
+    // Set up SVG canvas
+    const svgWidth = 500;  // Adjusted width
+    const svgHeight = 260;  // Adjusted height
+    const offsetX = 0 //(svgWidth - (4 * 120)) / 2;
+    const offsetY = 0 //(svgHeight - (2 * 105)) / 2;
+
+    const svg = d3.select(element).append("svg")
+        .attr("width", svgWidth)
+        .attr("height", svgHeight);
+
     const colors = [
         "rgb(247,148,29)",  // orange-like
         "rgb(146,39,143)",  // purple-like
@@ -114,16 +124,6 @@ function visualizeLattice(instructionsStr, element) {
     }
     
     adjustArrowPositions(instructions);
-    
-    // Set up SVG canvas
-    const svgWidth = 500;  // Adjusted width
-    const svgHeight = 260;  // Adjusted height
-    const offsetX = 0 //(svgWidth - (4 * 120)) / 2;
-    const offsetY = 0 //(svgHeight - (2 * 105)) / 2;
-
-    const svg = d3.select(element).append("svg")
-        .attr("width", svgWidth)
-        .attr("height", svgHeight);
 
     // Draw points
     const points = [
