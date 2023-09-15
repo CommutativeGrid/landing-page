@@ -61,7 +61,7 @@ function verticesPassingBy(instruction){
 
 
 
-function visualizeLattice(instructionsStr, element) {
+function visualizeLattice(instructionsStr,ss_vertices, element) {
     // Extract individual instructions using regex
     const regex = /([LMN])\["(\d+,\d+)"\]/g;
     let match;
@@ -130,7 +130,6 @@ function visualizeLattice(instructionsStr, element) {
         {x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1},
         {x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}
     ];
-    
 
     passedByVertices = [];
     instructions.forEach(instruction => {
@@ -141,27 +140,44 @@ function visualizeLattice(instructionsStr, element) {
         });
     });
 
-    
-    svg.selectAll("circle")
-        .data(points)
+    // parse ss_vertices, of form [[1,2],[3,2]],
+
+    const ss = ss_vertices.map(v => {
+        return {x: v[0], y: v[1]};
+    });
+
+    //raise error if ss_vertices_parsed is not a subset of passedByVertices
+    if (!ss.every(v => passedByVertices.some(p => p.x === v.x && p.y === v.y))) {
+        throw new Error("ss_vertices is not a subset of passedByVertices");
+    }
+
+    // get the points passed by but are not in ss_vertices
+    const non_ss = passedByVertices.filter(v => !ss.some(p => p.x === v.x && p.y === v.y));
+    console.log("non_ss", non_ss);
+
+    // Draw ss_vertices as solid black disks
+    svg.selectAll(".ss-circle")
+        .data(ss)
         .enter().append("circle")
+        .classed("ss-circle", true) // Add a class to these circles
         .attr("cx", d => d.x * 120 - 100 + offsetX)
         .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
         .attr("r", 10)
-        .attr("fill", "#eeeeee");
+        .attr("fill", "black");
+        
+    // Draw non_ss as hollow black disks
+    svg.selectAll(".non-ss-circle")
+        .data(non_ss)
+        .enter().append("circle")
+        .classed("non-ss-circle", true) // Add a class to these circles
+        .attr("cx", d => d.x * 120 - 100 + offsetX)
+        .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
+        .attr("r", 10)
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", "4");
 
-    svg.selectAll("circle")
-        .filter(d => passedByVertices.some(p => p.x === d.x && p.y === d.y))
-        .attr("fill", "#888");
-    // Draw passed by points as dimmed disks
-    // svg.selectAll("circle")
-    //     .data(passedByVertices)
-    //     .enter().append("circle")
-    //     .attr("cx", d => d.x * 120 - 100 + offsetX)
-    //     .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
-    //     .attr("r", 10)
-    //     .attr("fill", "#777");
-
+    
     // Initialize the array to store the original arrow points for highlighting
     let originalArrowPoints = [];
 
@@ -221,8 +237,8 @@ function visualizeLattice(instructionsStr, element) {
         drawArrow(instruction, index);
     });
 
-    // Highlight points connected by arrows with black color
-    svg.selectAll("circle")
-        .filter(d => originalArrowPoints.some(p => p.x === d.x && p.y === d.y))
-        .attr("fill", "black");
+    // // Highlight points connected by arrows with black color
+    // svg.selectAll("circle")
+    //     .filter(d => originalArrowPoints.some(p => p.x === d.x && p.y === d.y))
+    //     .attr("fill", "black");
 }
