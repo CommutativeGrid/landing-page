@@ -136,7 +136,7 @@ function visualizeLattice(instructionsStr,ss_vertices) {
         {x: 1, y: 2}, {x: 2, y: 2}, {x: 3, y: 2}, {x: 4, y: 2}
     ];
 
-    passedByVertices = [];
+    const passedByVertices = [];
     instructions.forEach(instruction => {
         verticesPassingBy(instruction).forEach(vertex => {
             if (!passedByVertices.some(v => v.x === vertex.x && v.y === vertex.y)) {
