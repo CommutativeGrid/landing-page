@@ -68,10 +68,17 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
     let instructions = [];
 
     // Set up SVG canvas
-    const svgWidth = 500;  // Adjusted width
-    const svgHeight = 260;  // Adjusted height
-    const offsetX = 0 //(svgWidth - (4 * 120)) / 2;
-    const offsetY = 0 //(svgHeight - (2 * 105)) / 2;
+    const hSpacing = 120;
+    const vSpacing = 105;
+    const circleRadius = 10;
+    const svgWidth = hSpacing*3+2*circleRadius;//420;  // Adjusted width
+    const svgHeight = vSpacing+2*circleRadius;//220;  // Adjusted height
+    const circleStrokeWidth = 4;
+    // const offsetX = 0 //(svgWidth - (4 * hSpacing)) / 2;
+    const offsetX = -hSpacing+circleRadius+(svgWidth-3*hSpacing-2*circleRadius)/2; // make the diagram centered
+    // const offsetY = 
+    const offsetY = -vSpacing+circleRadius+(svgHeight-vSpacing-2*circleRadius)/2;//vSpacing+(svgHeight-vSpacing-circleRadius)/2; //(svgHeight - (2 * vSpacing)) / 2;
+    // const offsetY = (svgHeight - (2 * vSpacing)) / 2;
 
     const svg = d3.select(element).append("svg")
         .attr("width", svgWidth)
@@ -96,7 +103,7 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
             .attr("markerHeight", 4)
             .attr("orient", "auto")
             .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
+            .attr("d", "M0,-5L10,0L0,5") // arrowhead path
             .attr("opacity", 1)
             .attr("fill", color);
     }
@@ -160,9 +167,9 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
         .data(ss)
         .enter().append("circle")
         .classed("ss-circle", true) // Add a class to these circles
-        .attr("cx", d => d.x * 120 - 100 + offsetX)
-        .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
-        .attr("r", 10)
+        .attr("cx", d => d.x * hSpacing + offsetX)
+        .attr("cy", d => svgHeight - (d.y * vSpacing + offsetY))  // Corrected cy for circles
+        .attr("r", circleRadius)
         .attr("fill", "black");
         
     // Draw non_ss as hollow black disks
@@ -170,12 +177,12 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
         .data(non_ss)
         .enter().append("circle")
         .classed("non-ss-circle", true) // Add a class to these circles
-        .attr("cx", d => d.x * 120 - 100 + offsetX)
-        .attr("cy", d => svgHeight - d.y * 105 + offsetY)  // Corrected cy for circles
-        .attr("r", 10)
+        .attr("cx", d => d.x * hSpacing + offsetX)
+        .attr("cy", d => svgHeight - (d.y * vSpacing + offsetY))  // Corrected cy for circles
+        .attr("r", circleRadius-circleStrokeWidth/2)
         .attr("fill", "none")
         .attr("stroke", "black")
-        .attr("stroke-width", "4");
+        .attr("stroke-width", circleStrokeWidth);
 
     
     // Initialize the array to store the original arrow points for highlighting
@@ -183,8 +190,8 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
 
     function drawArrow(instruction, index) {
         const type = instruction.type;
-        const from = instruction.from;
-        const to = instruction.to;
+        const from = instruction.from; //x:1~4 y:1~2
+        const to = instruction.to;   //x:1~4 y:1~2
 
         // Store the original points for highlighting
         originalArrowPoints.push({
@@ -194,12 +201,12 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
             x: instruction.to.x,
             y: instruction.to.y
         });
-        const circleRadius = 10;
-        const offsetDistance = circleRadius + 5;  // Radius + 5 units for offset
-        const fromX = from.x * 120 - 100 + offsetX;
-        const fromY = svgHeight - from.y_shifted * 105 + offsetY;
-        const toX = to.x * 120 - 100 + offsetX;
-        const toY = svgHeight - to.y_shifted * 105 + offsetY;
+        const offsetDistanceFrom = circleRadius + 5;  // Radius + 5 units for offset from 
+        const offsetDistanceTo = circleRadius + 10;  // Radius + 10 units for offset to
+        const fromX = from.x * hSpacing + offsetX;
+        const fromY = svgHeight - (from.y_shifted * vSpacing + offsetY);
+        const toX = to.x * hSpacing + offsetX;
+        const toY = svgHeight - (to.y_shifted * vSpacing + offsetY);
 
         // Calculate direction vector
         const dx = toX - fromX;
@@ -211,10 +218,10 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
         const ny = dy / len;
 
         // Calculate adjusted start and end points
-        const adjustedFromX = fromX + nx * offsetDistance;
-        const adjustedFromY = fromY + ny * offsetDistance;
-        const adjustedToX = toX - nx * offsetDistance;
-        const adjustedToY = toY - ny * offsetDistance;
+        const adjustedFromX = fromX + nx * offsetDistanceFrom;
+        const adjustedFromY = fromY + ny * offsetDistanceFrom;
+        const adjustedToX = toX - nx * offsetDistanceTo;
+        const adjustedToY = toY - ny * offsetDistanceTo;
 
         const color = colors[index % colors.length];
         const arrowId = `arrow-${index}`;
