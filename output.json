@@ -1,0 +1,1412 @@
+{
+    "paths": [
+        {
+            "path": "[N['1,1'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ]
+            ],
+            "type": "A1",
+            "interval": "I2",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['2,2'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ]
+            ],
+            "type": "A1",
+            "interval": "I10",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['3,3'],]",
+            "ss": [
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A1",
+            "interval": "I16",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['4,4'],]",
+            "ss": [
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A1",
+            "interval": "I20",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['1,1'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ]
+            ],
+            "type": "A1",
+            "interval": "I1",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['2,2'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "A1",
+            "interval": "I9",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['3,3'],]",
+            "ss": [
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A1",
+            "interval": "I15",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['4,4'],]",
+            "ss": [
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A1",
+            "interval": "I19",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['1,2'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I4",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['2,3'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I12",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[N['3,4'],]",
+            "ss": [
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I18",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['1,2'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I3",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['2,3'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I11",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[L['3,4'],]",
+            "ss": [
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I17",
+            "remark": "dimension vector"
+        },
+        {
+            "path": "[M['1,1'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I21",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,2'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I41",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,3'],]",
+            "ss": [
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I51",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['4,4'],]",
+            "ss": [
+                [
+                    4,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I55",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['1,2'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I25",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,3'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I44",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,4'],]",
+            "ss": [
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I53",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I6",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I14",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I5",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I13",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I28",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I46",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A2",
+            "interval": "I8",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I7",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A2",
+            "interval": "I30",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I31",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['2,3'],M['3,3'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I47",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['3,4'],M['4,4'],]",
+            "ss": [
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I54",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,3'],L['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I37",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['4,4'],L['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I50",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['4,4'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I40",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,3'],L['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I34",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,4'],L['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I49",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,4'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I39",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,4'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A3",
+            "interval": "I36",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['1,2'],N['1,2'],M['1,1'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I22",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['2,3'],N['2,3'],M['2,2'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I42",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['3,4'],N['3,4'],M['3,3'],]",
+            "ss": [
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I52",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],N['2,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I32",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['2,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I48",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],M['2,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ]
+            ],
+            "type": "A4",
+            "interval": "I34",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I33",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['2,3'],M['3,3'],M['3,4'],]",
+            "ss": [
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A4",
+            "interval": "I49",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[M['1,1'],M['1,1'],N['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I23",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,2'],M['2,2'],N['2,4'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I43",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],M['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A4",
+            "interval": "I36",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[M['1,1'],M['1,1'],N['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    1,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I24",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['2,3'],N['1,3'],M['1,2'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I26",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[N['3,4'],N['2,4'],M['2,3'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I45",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[L['1,2'],M['1,2'],N['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I27",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['3,3'],L['1,3'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A4",
+            "interval": "I39",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[N['3,4'],N['1,4'],M['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I29",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['1,2'],M['2,2'],N['2,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I26",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[M['2,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I45",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[L['1,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I38",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['1,2'],M['2,2'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I27",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[L['1,3'],M['2,3'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I35",
+            "remark": "source-sink"
+        },
+        {
+            "path": "[M['2,3'],L['1,3'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A4",
+            "interval": "I36",
+            "remark": "new"
+        },
+        {
+            "path": "[M['1,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I29",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[M['1,3'],M['2,3'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A4",
+            "interval": "I29",
+            "remark": "new"
+        },
+        {
+            "path": "[L['2,3'],M['3,3'],M['3,4'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    3,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A5",
+            "interval": "I39",
+            "remark": "new"
+        },
+        {
+            "path": "[M['3,3'],L['1,3'],L['1,4'],M['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A5",
+            "interval": "I36",
+            "remark": "new"
+        },
+        {
+            "path": "[N['2,4'],N['3,4'],M['3,3'],L['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A5",
+            "interval": "I35",
+            "remark": "new"
+        },
+        {
+            "path": "[N['2,3'],N['2,3'],M['2,2'],M['1,2'],N['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    2,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I27",
+            "remark": "new"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],M['2,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I35",
+            "remark": "corner-complete"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],M['2,3'],M['2,3'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I35",
+            "remark": "new"
+        },
+        {
+            "path": "[L['1,2'],M['2,2'],N['2,4'],N['1,4'],M['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I29",
+            "remark": "new"
+        },
+        {
+            "path": "[N['3,4'],N['2,4'],M['2,2'],L['1,2'],L['1,3'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I35",
+            "remark": "new"
+        },
+        {
+            "path": "[N['2,4'],N['3,4'],M['3,3'],L['1,3'],L['1,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    4,
+                    2
+                ]
+            ],
+            "type": "A6",
+            "interval": "I36",
+            "remark": "new"
+        },
+        {
+            "path": "[M['2,3'],L['1,3'],L['1,3'],M['3,3'],N['3,4'],]",
+            "ss": [
+                [
+                    1,
+                    2
+                ],
+                [
+                    2,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I35",
+            "remark": "new"
+        },
+        {
+            "path": "[M['1,3'],L['1,3'],L['1,2'],M['2,2'],N['2,4'],]",
+            "ss": [
+                [
+                    1,
+                    1
+                ],
+                [
+                    3,
+                    2
+                ],
+                [
+                    4,
+                    1
+                ]
+            ],
+            "type": "A6",
+            "interval": "I29",
+            "remark": "new"
+        }
+    ]
+}

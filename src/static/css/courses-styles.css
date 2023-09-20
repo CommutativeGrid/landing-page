@@ -1,0 +1,19 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+.arrowHead {
+    fill: black;
+}
+
+#courses-table .tabulator-cell {
+    text-align: center;
+    vertical-align: middle;
+}
+
+#courses-table .tabulator-header {
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+

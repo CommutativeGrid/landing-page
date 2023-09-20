@@ -61,9 +61,9 @@ function verticesPassingBy(instruction){
 
 
 
-function visualizeLattice(instructionsStr,ss_vertices, element) {
+function visualizeLattice(instructionsStr,ss_vertices) {
     // Extract individual instructions using regex
-    const regex = /([LMN])\["(\d+,\d+)"\]/g;
+    const regex = /([LMN])\['(\d+,\d+)'\]/g;
     let match;
     let instructions = [];
 
@@ -80,7 +80,7 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
     const offsetY = -vSpacing+circleRadius+(svgHeight-vSpacing-2*circleRadius)/2;//vSpacing+(svgHeight-vSpacing-circleRadius)/2; //(svgHeight - (2 * vSpacing)) / 2;
     // const offsetY = (svgHeight - (2 * vSpacing)) / 2;
 
-    const svg = d3.select(element).append("svg")
+    const svg = d3.create("svg")
         .attr("width", svgWidth)
         .attr("height", svgHeight);
 
@@ -93,7 +93,7 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
     ];
 
     function createArrowMarker(id, color) {
-        console.log("Creating marker", id, color);
+        // console.log("Creating marker", id, color);
         svg.append("defs").append("marker")
             .attr("id", id)
             .attr("viewBox", "0 -5 10 10")
@@ -107,7 +107,6 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
             .attr("opacity", 1)
             .attr("fill", color);
     }
-    
     
     while ((match = regex.exec(instructionsStr)) !== null) {
         const type = match[1];
@@ -131,7 +130,6 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
     }
     
     adjustArrowPositions(instructions);
-
     // Draw points
     const points = [
         {x: 1, y: 1}, {x: 2, y: 1}, {x: 3, y: 1}, {x: 4, y: 1},
@@ -155,12 +153,15 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
 
     //raise error if ss_vertices_parsed is not a subset of passedByVertices
     if (!ss.every(v => passedByVertices.some(p => p.x === v.x && p.y === v.y))) {
+        console.log("ss_vertices", ss);
+        console.log("passedByVertices", passedByVertices);
+        console.log("instructionStr", instructionsStr);
         throw new Error("ss_vertices is not a subset of passedByVertices");
     }
 
     // get the points passed by but are not in ss_vertices
     const non_ss = passedByVertices.filter(v => !ss.some(p => p.x === v.x && p.y === v.y));
-    console.log("non_ss", non_ss);
+    // console.log("non_ss", non_ss);
 
     // Draw ss_vertices as solid black disks
     svg.selectAll(".ss-circle")
@@ -243,9 +244,12 @@ function visualizeLattice(instructionsStr,ss_vertices, element) {
     instructions.forEach((instruction, index) => {
         drawArrow(instruction, index);
     });
-
-    // // Highlight points connected by arrows with black color
+    // // Hiht points connected by arrows with black color
     // svg.selectAll("circle")
     //     .filter(d => originalArrowPoints.some(p => p.x === d.x && p.y === d.y))
     //     .attr("fill", "black");
+    return svg.node();
 }
+
+
+export { visualizeLattice };
