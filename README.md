@@ -1,3 +1,6 @@
+#TODOS:
+- [ ] free top row
+- [ ] table mode/gallery mode
 # Academic Project Page Template
 This is an academic paper project page template.
 

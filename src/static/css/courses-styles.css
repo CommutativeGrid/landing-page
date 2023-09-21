@@ -7,13 +7,15 @@ body {
     fill: black;
 }
 
-#courses-table .tabulator-cell {
-    text-align: center;
-    vertical-align: middle;
+
+.gallery-item {
+    width: 440px;
+    height: 180px;
+    border: 2px solid #E5E7EB; /* This is a light gray color */
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center;     /* Vertically center */
+    box-sizing: border-box;
 }
 
-#courses-table .tabulator-header {
-    text-align: center !important;
-    vertical-align: middle !important;
-}
 

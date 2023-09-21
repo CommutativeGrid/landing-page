@@ -3,8 +3,8 @@
 import plotData from '../data/plot_data.json';
 import { visualizeLattice } from './courses.js';
 
+
 // Now you can use plotData directly
-console.log(plotData);
 
 // fetch('../data/plot_data.json')
 //     .then(response => response.json())
@@ -26,63 +26,74 @@ function typeSorter(a, b) {
     return parseInt(a.slice(1)) - parseInt(b.slice(1));
 }
 
-function initializeTable(plotData) {
-    // Store the selected types for filtering
-    let selectedTypes = [];
-
-
-
-    var table = new Tabulator("#courses-table", {
+function initializeTable() {
+    var table = new Tabulator("#table", {
         width: "100%",
         data: plotData.paths, 
         layout: "fitDataTable",
         responsiveLayout: "hide",
+        // set to screen height, use js to get screen height
+        height: "calc(100vh - 120px)",
         columns: [
             {
                 title:"Alternating Zigzag Course", 
+                headerHozAlign:"center",
                 formatter: visualizeLatticeFormatter,
                 headerSort: false,
-                width: 400
+                width: 460,
+                hozAlign:"center"
             },
             {
                 title:"Type",
                 field:"type",
                 sorter: typeSorter,
-                headerFilter: false,
-                headerFilterFunc: (data, row) => {
-                    if (selectedTypes.length === 0) return true;
-                    return selectedTypes.includes(data);
-                },
+                headerHozAlign:"center",
+                width: 140,
+                hozAlign:"center",
+                headerFilter: "list",
                 headerFilterParams: {
-                    values: ["A0", "A1", "A2", "A3", "A4", "A5", "A6"], // Adjust accordingly
-                    multiselect: true,
-                    onChange: function(newSelectedTypes) {
-                        selectedTypes = newSelectedTypes;
-                        table.setFilter((data, type) => {
-                            return selectedTypes.includes(data.type);
-                        });
-                    }
+                    values: ["A1", "A2", "A3", "A4", "A5", "A6"],  // Possible values for the "Type" column
+                    multiselect: true,                            // Enable multi-selection
                 },
-                width: 80
+                headerFilterFunc: function(headerValue, rowValue, rowData, filterParams){
+                    if (headerValue.length === 0) {
+                        return true;
+                    }
+                    return headerValue.includes(rowValue);
+                }
             },
-            {
-                title:"Associated Interval",
-                field:"interval",
-                headerSort: false,
-                width: 120
-            },
+            // {
+            //     title:"Interval",
+            //     field:"interval",
+            //     headerHozAlign:"center",
+            //     headerSort: false,
+            //     width: 140,
+            //     hozAlign:"center",
+            // },
             {
                 title:"Remark",
                 field:"remark",
+                headerHozAlign:"center",
                 headerSort: true,
-                headerFilter: false, //"select",
+                width: 180,
+                hozAlign:"center",
+                headerFilter: "list",
                 headerFilterParams: {
-                    values: true
+                    values: ["source-sink", "corner-complete", "new"],  // Possible values for the "Type" column
+                    multiselect: true,                            // Enable multi-selection
                 },
-                width: 140
+                headerFilterFunc: function(headerValue, rowValue, rowData, filterParams){
+                    if (headerValue.length === 0) {
+                        return true;
+                    }
+                    return headerValue.includes(rowValue);
+                }
             }
         ]
     });
+    return table;
 }
 
-initializeTable(plotData);
+initializeTable();
+
+export { initializeTable };

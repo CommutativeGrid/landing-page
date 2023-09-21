@@ -72,7 +72,7 @@ function visualizeLattice(instructionsStr,ss_vertices) {
     const vSpacing = 105;
     const circleRadius = 10;
     const svgWidth = hSpacing*3+2*circleRadius;//420;  // Adjusted width
-    const svgHeight = vSpacing+2*circleRadius;//220;  // Adjusted height
+    const svgHeight = vSpacing+2*circleRadius+20;//240;  // Adjusted height
     const circleStrokeWidth = 4;
     // const offsetX = 0 //(svgWidth - (4 * hSpacing)) / 2;
     const offsetX = -hSpacing+circleRadius+(svgWidth-3*hSpacing-2*circleRadius)/2; // make the diagram centered
@@ -184,6 +184,16 @@ function visualizeLattice(instructionsStr,ss_vertices) {
         .attr("fill", "none")
         .attr("stroke", "black")
         .attr("stroke-width", circleStrokeWidth);
+    
+    // Draw the rest points as very dim gray disks
+    svg.selectAll(".rest-circle")
+        .data(points.filter(p => !passedByVertices.some(v => v.x === p.x && v.y === p.y)))
+        .enter().append("circle")
+        .classed("rest-circle", true) // Add a class to these circles
+        .attr("cx", d => d.x * hSpacing + offsetX)
+        .attr("cy", d => svgHeight - (d.y * vSpacing + offsetY))  // Corrected cy for circles
+        .attr("r", circleRadius)
+        .attr("fill", "rgba(210,210,210,0.382)");
 
     
     // Initialize the array to store the original arrow points for highlighting
@@ -244,7 +254,7 @@ function visualizeLattice(instructionsStr,ss_vertices) {
     instructions.forEach((instruction, index) => {
         drawArrow(instruction, index);
     });
-    // // Hiht points connected by arrows with black color
+    // points connected by arrows with black color
     // svg.selectAll("circle")
     //     .filter(d => originalArrowPoints.some(p => p.x === d.x && p.y === d.y))
     //     .attr("fill", "black");
@@ -253,3 +263,16 @@ function visualizeLattice(instructionsStr,ss_vertices) {
 
 
 export { visualizeLattice };
+
+
+// <!-- <script src="static/js/courses.js"></script> -->
+// <!-- <script>
+// document.addEventListener("DOMContentLoaded", function() {
+//     const element1 = document.getElementById('1');
+//     const svgElement=visualizeLattice("[M['1,3'],L['1,3'],L['1,2'],M['2,2'],N['2,4'],]",
+//     [[1,1],[4,1],[3,2]]);
+//     element1.appendChild(svgElement);
+//     // const element2 = document.getElementById('2');
+//     // visualizeLattice('[M["1,2"],M["2,2"],N["2,4"],]', element2);
+// });
+// </script> -->
