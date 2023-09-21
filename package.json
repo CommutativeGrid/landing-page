@@ -3,8 +3,8 @@
     "source": "src/index.html",
     "browserslist": "> 0.5%, last 2 versions, not dead",
     "scripts": {
-        "start": "parcel",
-        "build": "parcel build"
+        "start": "npx parcel serve src/index.html --open",
+        "build": "npx parcel build src/index.html --public-url ./ --no-scope-hoist"
     },
     "devDependencies": {
         "parcel": "^2.9.3",
