@@ -6,9 +6,6 @@ View the live site at [ladder-invariants.netlify.app](https://ladder-invariants.
 
 ## Technology Stack
 
-
-## Technology Stack
-
 - **Webpage Structure and Content Management**: 
   - **HTML**: Forms the basic structure and content of the webpage.
   - **JavaScript**: Used for enhancing the webpage with interactive and dynamic features.
