@@ -25,9 +25,9 @@ View the live site at [ladder-invariants.netlify.app](https://ladder-invariants.
 
 - `src/index.html`: The main HTML file with the website's content.
 - `src/courses.html`: The HTML file for the courses page.
-- `/src/css/`: Contains CSS files, including TailwindCSS configurations.
-- `/src/js/`: Contains JavaScript files.
-- `static/`: Static resources like images and additional media.
+- `src/css/`: Contains CSS files, including TailwindCSS configurations.
+- `src/js/`: Contains JavaScript files.
+- `src/static/`: Static resources like images and additional media.
 
 ### Local Development
 
