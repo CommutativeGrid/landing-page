@@ -33,10 +33,6 @@ window.onload = setGalleryColumns;
 window.onresize = setGalleryColumns;
 
 
-
-
-
-
 // Call this function to render the SVGs in the gallery container
 renderGalleryItems();
 export { renderGalleryItems };
