@@ -41,7 +41,3 @@ View the live site at [ladder-invariants.netlify.app](https://ladder-invariants.
 1. Commit your changes to the repository.
 2. Push the commit to GitHub.
 3. Netlify will automatically detect the changes and redeploy the site.
-
-## License
-
-This project and its website are licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
