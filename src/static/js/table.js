@@ -33,7 +33,7 @@ function initializeTable() {
         layout: "fitDataTable",
         responsiveLayout: "hide",
         // set to screen height, use js to get screen height
-        height: "calc(100vh - 120px)",
+        height: "calc(100vh-20px)",
         columns: [
             {
                 title:"Alternating Zigzag Course", 

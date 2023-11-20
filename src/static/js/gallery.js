@@ -21,11 +21,20 @@ function renderGalleryItems() {
 function setGalleryColumns() {
     const galleryContainer = document.getElementById("gallery-container");
     const parentWidth = galleryContainer.parentElement.offsetWidth;
+    // console.log(galleryContainer.parentElement)
+    // console.log(galleryContainer.parentElement.offsetWidth)
 
     const galleryItemWidth = 440; // width of each gallery item
     const gap = 16; // assuming gap-4 translates to 16 pixels
     const numColumns = Math.floor((parentWidth) / (galleryItemWidth + gap));
-
+    // console.log(`numColumns: ${numColumns}`)
+    // add class grid-cols-<numColumns> to the gallery container
+    // use f-string
+    if (numColumns<=12){
+        galleryContainer.classList.add(`grid-cols-${numColumns}`);
+    } else {
+        galleryContainer.classList.add(`grid-cols-12`);
+    }
     galleryContainer.style.gridTemplateColumns = `repeat(${numColumns}, 1fr)`;
 }
 

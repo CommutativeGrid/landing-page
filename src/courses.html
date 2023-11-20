@@ -26,7 +26,8 @@
     
     <section class="section hero">
         <div class="hero-body">
-            <div class="container is-max-desktop is-centered has-text-centered">
+            <div class="container is-max-desktop is-centered has-text-centered h-screen">
+                <!-- might need to adjust the class attributes above for more columns in the gallery mode -->
                 <h1 class="title">Alternating Zigzag Courses for CL(4)</h1>
                     <div class="columns is-centered has-text-centered container is-max-desktop">
                         <div class="column">
@@ -59,11 +60,11 @@
 
                 
                         <div id="table-container" class="h-screen container">
-                            <div class="h-screen" id="table">
+                            <div id="table" class="h-screen sticky top-0">
                             </div>
                         </div>
 
-                        <div id="gallery-container" class="grid grid-cols-2 gap-2 p-4 border-gray-300 border-dashed container is-hidden">
+                        <div id="gallery-container" class="grid gap-2 p-4 border-gray-300 border-dashed container is-hidden">
                         </div>     
             </div>
         </div>
