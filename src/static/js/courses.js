@@ -1,6 +1,15 @@
+/**
+ * test if two arrows overlap
+ * @param {*} arrow1 
+ * @param {*} arrow2 
+ * @returns 
+ */
 function arrowsOverlap(arrow1, arrow2) {
     // Exclude M arrows from overlap detection
-    if (arrow1.type === "M" || arrow2.type === "M") return false;
+    if (arrow1.type === "M" || arrow2.type === "M"){
+        //return true only if the two arrows are identical
+        return arrow1.from.x === arrow2.from.x && arrow1.from.y === arrow2.from.y && arrow1.to.x === arrow2.to.x && arrow1.to.y === arrow2.to.y;
+    }
 
     // Check for horizontal overlap
     if (arrow1.from.y === arrow2.from.y && arrow1.to.y === arrow2.to.y) {
@@ -14,6 +23,8 @@ function arrowsOverlap(arrow1, arrow2) {
 const overlapOffset = 0.05;  // Adjust as needed
 
 function adjustArrowPositions(instructions) {
+    //! x and y coordinates here are based on the usual mathematical convention, i.e. (0,0) is at the bottom left corner
+    //! which is not the same as the SVG convention, i.e. (0,0) is at the top left corner   
 
     const overlaps = ((instructions)=>{
         let overlaps = [];
@@ -28,17 +39,41 @@ function adjustArrowPositions(instructions) {
     })(instructions);
 
     for (let [i, j] of overlaps) {
-        // Adjust for overlaps
-        instructions[i].from.y_shifted = instructions[i].from.y - overlapOffset;
-        instructions[i].to.y_shifted = instructions[i].to.y - overlapOffset;
-        instructions[j].from.y_shifted = instructions[j].from.y + overlapOffset;
-        instructions[j].to.y_shifted = instructions[j].to.y + overlapOffset;
+        if (instructions[i].type != 'M'){
+            // if not type M (connecting two layers), only shift the y coordinate
+            // Adjust for overlaps
+            instructions[i].from.y_shifted = instructions[i].from.y - overlapOffset;
+            instructions[i].to.y_shifted = instructions[i].to.y - overlapOffset;
+            instructions[j].from.y_shifted = instructions[j].from.y + overlapOffset;
+            instructions[j].to.y_shifted = instructions[j].to.y + overlapOffset;
+        } else if (instructions[i].type === 'M'&& instructions[i].from.x === instructions[i].to.x) {
+            // if type M and vertical shift the x coordinate only 
+            instructions[i].from.x_shifted = instructions[i].from.x - overlapOffset;
+            instructions[i].to.x_shifted = instructions[i].to.x - overlapOffset;
+            instructions[j].to.x_shifted = instructions[j].to.x + overlapOffset;
+            instructions[j].from.x_shifted = instructions[j].from.x + overlapOffset;
+        } else {
+            // if type M and slanted shift both x and y coordinates
+            instructions[i].from.y_shifted = instructions[i].from.y - 0.707*overlapOffset;
+            instructions[i].to.y_shifted = instructions[i].to.y - 0.707*overlapOffset;
+            instructions[i].from.x_shifted = instructions[i].from.x + 0.707*overlapOffset;
+            instructions[i].to.x_shifted = instructions[i].to.x + 0.707*overlapOffset;
+            instructions[j].from.y_shifted = instructions[j].from.y + 0.707*overlapOffset;
+            instructions[j].to.y_shifted = instructions[j].to.y + 0.707*overlapOffset;
+            instructions[j].to.x_shifted = instructions[j].to.x - 0.707*overlapOffset;
+            instructions[j].from.x_shifted = instructions[j].from.x - 0.707*overlapOffset;
+        }
+
     }
     //for instructions that are not overlapping, set y_shifted to y
     instructions.forEach(instruction => {
         if (!instruction.to.hasOwnProperty("y_shifted")) {
             instruction.from.y_shifted = instruction.from.y;
             instruction.to.y_shifted = instruction.to.y;
+        }
+        if (!instruction.to.hasOwnProperty("x_shifted")) {
+            instruction.from.x_shifted = instruction.from.x;
+            instruction.to.x_shifted = instruction.to.x;
         }
     });
     return instructions;
@@ -71,7 +106,7 @@ function visualizeLattice(instructionsStr,ss_vertices) {
     const hSpacing = 120;
     const vSpacing = 105;
     const circleRadius = 10;
-    const svgWidth = hSpacing*3+2*circleRadius;//420;  // Adjusted width
+    const svgWidth = hSpacing*3+2*circleRadius+40;//420;  // Adjusted width
     const svgHeight = vSpacing+2*circleRadius+20;//240;  // Adjusted height
     const circleStrokeWidth = 4;
     // const offsetX = 0 //(svgWidth - (4 * hSpacing)) / 2;
@@ -113,15 +148,15 @@ function visualizeLattice(instructionsStr,ss_vertices) {
         const [a, b] = match[2].split(',').map(Number);
         let from = {}, to = {};
         switch (type) {
-            case "N":
+            case "N": // lower layer
                 from = {x: a, y: 1};
                 to = {x: b, y: 1};
                 break;
-            case "L":
+            case "L": // upper layer
                 from = {x: a, y: 2};
                 to = {x: b, y: 2};
                 break;
-            case "M":
+            case "M": // connecting 
                 from = {x: a, y: 1};
                 to = {x: b, y: 2};
                 break;
@@ -214,9 +249,9 @@ function visualizeLattice(instructionsStr,ss_vertices) {
         });
         const offsetDistanceFrom = circleRadius + 5;  // Radius + 5 units for offset from 
         const offsetDistanceTo = circleRadius + 10;  // Radius + 10 units for offset to
-        const fromX = from.x * hSpacing + offsetX;
+        const fromX = from.x_shifted * hSpacing + offsetX;
         const fromY = svgHeight - (from.y_shifted * vSpacing + offsetY);
-        const toX = to.x * hSpacing + offsetX;
+        const toX = to.x_shifted * hSpacing + offsetX;
         const toY = svgHeight - (to.y_shifted * vSpacing + offsetY);
 
         // Calculate direction vector
@@ -263,16 +298,3 @@ function visualizeLattice(instructionsStr,ss_vertices) {
 
 
 export { visualizeLattice };
-
-
-// <!-- <script src="static/js/courses.js"></script> -->
-// <!-- <script>
-// document.addEventListener("DOMContentLoaded", function() {
-//     const element1 = document.getElementById('1');
-//     const svgElement=visualizeLattice("[M['1,3'],L['1,3'],L['1,2'],M['2,2'],N['2,4'],]",
-//     [[1,1],[4,1],[3,2]]);
-//     element1.appendChild(svgElement);
-//     // const element2 = document.getElementById('2');
-//     // visualizeLattice('[M["1,2"],M["2,2"],N["2,4"],]', element2);
-// });
-// </script> -->
