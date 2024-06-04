@@ -24,7 +24,7 @@ const overlapOffset = 0.05;  // Adjust as needed
 
 function adjustArrowPositions(instructions) {
     //! x and y coordinates here are based on the usual mathematical convention, i.e. (0,0) is at the bottom left corner
-    //! which is not the same as the SVG convention, i.e. (0,0) is at the top left corner   
+    //! which is not the same as the SVG convention, i.e. (0,0) is at the top left corner  
 
     const overlaps = ((instructions)=>{
         let overlaps = [];
@@ -65,6 +65,30 @@ function adjustArrowPositions(instructions) {
         }
 
     }
+    //special case "[N['2,3'],N['2,3'],M['2,2'],M['1,2'],N['1,4'],]"
+    const specialCase = [
+        { type: "N", from: { x: 2, y: 1 }, to: { x: 3, y: 1 } },
+        { type: "N", from: { x: 2, y: 1 }, to: { x: 3, y: 1 } },
+        { type: "M", from: { x: 2, y: 1 }, to: { x: 2, y: 2 } },
+        { type: "M", from: { x: 1, y: 1 }, to: { x: 2, y: 2 } },
+        { type: "N", from: { x: 1, y: 1 }, to: { x: 4, y: 1 } }
+    ];
+
+    const isSpecialCase = instructions.length === specialCase.length && instructions.every((inst, idx) => {
+        const spec = specialCase[idx];
+        return inst.type === spec.type && inst.from.x === spec.from.x && inst.from.y === spec.from.y && inst.to.x === spec.to.x && inst.to.y === spec.to.y;
+    });
+
+    if (isSpecialCase) {
+        instructions[0].from.y_shifted = instructions[0].from.y - 2.5 * overlapOffset;
+        instructions[0].to.y_shifted = instructions[0].to.y - 2.5 * overlapOffset;
+        instructions[1].from.y_shifted = instructions[1].from.y - 0.5 * overlapOffset;
+        instructions[1].to.y_shifted = instructions[1].to.y - 0.5 * overlapOffset;
+        instructions[4].from.y_shifted = instructions[4].from.y + 1.5 * overlapOffset;
+        instructions[4].to.y_shifted = instructions[4].to.y + 1.5 * overlapOffset;
+        // Instructions 1 and 3 remain unchanged as their y_shifted values are already intact
+    }
+
     //for instructions that are not overlapping, set y_shifted to y
     instructions.forEach(instruction => {
         if (!instruction.to.hasOwnProperty("y_shifted")) {
