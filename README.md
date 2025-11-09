@@ -1,6 +1,6 @@
 # Ladder Invariants Project Landing Page
 
-This repository contains the landing page for the Ladder Invariants project, which corresponds to the paper **[Refinement of Interval Approximations for Fully Commutative Quivers](https://arxiv.org/abs/2310.03649)**. 
+This repository contains the landing page for the Ladder Invariants project, which corresponds to the paper **[Refinement of Interval Approximations for Fully Commutative Quivers](https://link.springer.com/article/10.1007/s13160-025-00739-w)**. 
 
 View the live site at [ladder-invariants.netlify.app](https://ladder-invariants.netlify.app/).
 
