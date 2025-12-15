@@ -8,7 +8,12 @@
 // O50: 2146 entries
 // ============================================
 
+
+// Wrapped in IIFE to prevent global scope pollution
+(function() {
+
 // SiO2 - Si atoms 100% deleted
+
 const DATA_SI100 = (() => {
   const len = 70;
   const dec = {};
@@ -903,3 +908,6 @@ window.CPD_DATA = {
   SI100: DATA_SI100,
   O50: DATA_O50
 };
+
+
+})();
