@@ -1826,7 +1826,11 @@
       const plotLayout = {
         title: {
           text: options.plotTitle,
-          font: { size: 18 }
+          font: { size: 18 },
+          x: 0.45,
+          y: 0.99,
+          xanchor: 'center',
+          yanchor: 'top',
         },
         xaxis: {
           range: [0, currentData.len],
@@ -1868,8 +1872,8 @@
         hovermode: 'closest',
         showlegend: true,
         legend: {
-          x: 0.5,
-          y: 1.01,
+          x: 0.63,
+          y: 1.02,
           xanchor: 'center',
           yanchor: 'bottom',
           orientation: 'h'
@@ -1879,7 +1883,7 @@
           options.labelTop && {
             text: options.labelTop,
             x: 0.44,
-            y: 1.08,
+            y: 1.01,
             xref: 'paper',
             yref: 'paper',
             xanchor: 'center',
@@ -1891,7 +1895,7 @@
           options.labelBottom && {
             text: options.labelBottom,
             x: 0.44,
-            y: -0.08,
+            y: -0.02,
             xref: 'paper',
             yref: 'paper',
             xanchor: 'center',
@@ -1902,7 +1906,7 @@
           // Left label
           options.labelLeft && {
             text: options.labelLeft,
-            x: -0.08,
+            x: 0.16,
             y: 0.5,
             xref: 'paper',
             yref: 'paper',
@@ -1915,7 +1919,7 @@
           // Right label
           options.labelRight && {
             text: options.labelRight,
-            x: 0.92,
+            x: 0.72,
             y: 0.5,
             xref: 'paper',
             yref: 'paper',
