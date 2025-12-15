@@ -6,3 +6,9 @@ declare module '*.css' {
 }
 
 declare module 'tabulator-tables/dist/css/tabulator.min.css'
+
+declare module 'plotly.js-dist-min' {
+  import Plotly from 'plotly.js'
+  export default Plotly
+  export * from 'plotly.js'
+}
