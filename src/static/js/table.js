@@ -1,20 +1,6 @@
 // Fetch the data from the JSON file
-
-import plotData from '../data/plot_data.json';
+import { loadPlotData } from './plotDataLoader.js';
 import { visualizeLattice } from './courses.js';
-
-
-// Now you can use plotData directly
-
-// fetch('../data/plot_data.json')
-//     .then(response => response.json())
-//     .then(data => {
-//         // Initialize the table with the fetched data
-//         initializeTable(data.paths);
-//     })
-//     .catch(error => {
-//         console.error("There was an error fetching the JSON data:", error);
-//     });
 
 function visualizeLatticeFormatter(cell, formatterParams, onRendered) {
     let data = cell.getRow().getData();
@@ -26,7 +12,8 @@ function typeSorter(a, b) {
     return parseInt(a.slice(1)) - parseInt(b.slice(1));
 }
 
-function initializeTable() {
+async function initializeTable() {
+    const plotData = await loadPlotData();
     var table = new Tabulator("#table", {
         width: "100%",
         data: plotData.paths, 

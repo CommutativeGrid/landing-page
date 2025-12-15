@@ -1,12 +1,12 @@
 // Fetch the data from the JSON file
-
-import plotData from '../data/plot_data.json';
+import { loadPlotData } from './plotDataLoader.js';
 import { visualizeLattice } from './courses.js';
 
-function renderGalleryItems() {
+async function renderGalleryItems() {
     const galleryContainer = document.getElementById("gallery-container");
     // clear the gallery container in case it already has items
     galleryContainer.innerHTML = "";
+    const plotData = await loadPlotData();
     plotData.paths.forEach(data => {
         const galleryItem = document.createElement('div');
         galleryItem.className = `gallery-item ${data.type} ${data.remark}`;
