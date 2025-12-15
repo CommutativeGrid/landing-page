@@ -33,7 +33,7 @@ export default function HomePage() {
               ))}
             </div>
             <div className="flex flex-wrap justify-center gap-4">
-              <Button asChild variant="default" className="rounded-full">
+              <Button asChild variant="dark" className="rounded-full">
                 <a
                   href="https://github.com/CommutativeGrids/commutazzio"
                   target="_blank"
@@ -43,7 +43,7 @@ export default function HomePage() {
                   Code
                 </a>
               </Button>
-              <Button asChild variant="default" className="rounded-full">
+              <Button asChild variant="dark" className="rounded-full">
                 <a
                   href="https://link.springer.com/article/10.1007/s13160-025-00739-w"
                   target="_blank"
@@ -102,29 +102,13 @@ export default function HomePage() {
             <p className="text-gray-700 mb-4">
               Explore connected persistence diagrams from the SiO₂ dataset used in the paper.
             </p>
-            <Button asChild>
+            <Button asChild variant="bulmaPrimary">
               <Link to="/cpd-viewer">Open Viewer</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      <footer className="py-8 px-4">
-        <div className="max-w-xl mx-auto text-center">
-          <p className="text-sm text-gray-600">
-            Created with the{' '}
-            <a
-              href="https://github.com/eliahuhorwitz/Academic-project-page-template"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
-            >
-              Academic Project Page Template
-            </a>
-            .
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }
