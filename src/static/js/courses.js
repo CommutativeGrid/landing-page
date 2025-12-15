@@ -212,9 +212,6 @@ function visualizeLattice(instructionsStr,ss_vertices) {
 
     //raise error if ss_vertices_parsed is not a subset of passedByVertices
     if (!ss.every(v => passedByVertices.some(p => p.x === v.x && p.y === v.y))) {
-        console.log("ss_vertices", ss);
-        console.log("passedByVertices", passedByVertices);
-        console.log("instructionStr", instructionsStr);
         throw new Error("ss_vertices is not a subset of passedByVertices");
     }
 

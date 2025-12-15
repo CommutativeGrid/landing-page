@@ -6,10 +6,14 @@
   <title>Connected Persistence Diagram Viewer</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/bulma.min.css">
   <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_SVG"></script>
   <style>
+    /* Minimal reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    body, h1, h2, p { margin: 0; }
+    button, input, select { font: inherit; }
+
     :root {
       --primary: #2563eb;
       --primary-light: #3b82f6;
@@ -34,39 +38,6 @@
       font-size: 14px;
       line-height: 1.5;
     }
-    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-
-    /* Control Panel */
-    .control-panel {
-      background: white;
-      border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-    .plot-container {
-      background: white;
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow);
-    }
-
-    /* Section Headers */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--gray-500);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--gray-200);
-    }
-    .section-header svg { width: 16px; height: 16px; }
-
     /* Subsection */
     .subsection {
       background: var(--gray-50);
@@ -151,11 +122,6 @@
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
     }
-    .label-hint {
-      font-weight: 400;
-      color: var(--gray-400);
-      font-size: 10px;
-    }
 
     /* Filter Group */
     .filter-group {
@@ -181,46 +147,39 @@
       font-size: 12px;
       padding: 0 2px;
     }
-
-    /* Range Slider */
-    .range-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .range-group label {
-      font-size: 11px;
+    .stepper-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      background: var(--gray-50);
+      color: var(--gray-600);
+      font-size: 16px;
       font-weight: 500;
-      color: var(--gray-500);
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      display: flex;
-      justify-content: space-between;
-    }
-    .range-group label span {
-      font-weight: 600;
-      color: var(--gray-700);
-    }
-    .range-group input[type="range"] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 4px;
-      border-radius: 2px;
-      background: var(--gray-200);
-      outline: none;
-    }
-    .range-group input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--primary);
       cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      transition: transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
     }
-    .range-group input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
+    .stepper-btn:hover {
+      background: var(--gray-100);
+      border-color: var(--gray-400);
+    }
+    .stepper-btn:active {
+      background: var(--gray-200);
+    }
+    /* Hide default number input spinners for lifetime inputs */
+    #upper-lifetime-min::-webkit-outer-spin-button,
+    #upper-lifetime-min::-webkit-inner-spin-button,
+    #lower-lifetime-min::-webkit-outer-spin-button,
+    #lower-lifetime-min::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    #upper-lifetime-min,
+    #lower-lifetime-min {
+      -moz-appearance: textfield;
     }
 
     /* Radio Cards */
@@ -275,11 +234,6 @@
     }
 
     /* Toggle Switches */
-    .toggle-row {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-    }
     .toggle-group {
       display: flex;
       align-items: center;
@@ -356,11 +310,7 @@
       color: white;
     }
 
-    /* Export Buttons */
-    .export-buttons {
-      display: flex;
-      gap: 8px;
-    }
+    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -390,84 +340,280 @@
       border-color: var(--gray-400);
     }
 
-    /* Tabs */
-    .data-input-area {
-      width: 100%;
-      height: 180px;
-      font-family: 'SF Mono', Monaco, monospace;
-      font-size: 12px;
-      padding: 12px;
+    /* Color picker wrapper */
+    .color-picker-wrapper {
+      background: var(--gray-50);
       border: 1px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      resize: vertical;
+      border-radius: 6px;
+      padding: 8px;
     }
-    .tabs-container { margin-bottom: 16px; }
-    h1.title { color: var(--gray-800); }
-    .subtitle { color: var(--gray-500); }
-
-    /* Two column layout */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: var(--gray-200);
-      margin: 20px 0;
+    .color-presets-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 4px;
+      margin-bottom: 8px;
     }
-
-    /* Dataset Options */
-    .dataset-options {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+    .color-preset {
+      width: 100%;
+      aspect-ratio: 1;
+      min-width: 20px;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.12s;
+      padding: 0;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
     }
-    .dataset-option {
+    .color-preset:hover {
+      transform: scale(1.15);
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .color-preset.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3), inset 0 0 0 1px rgba(255,255,255,0.3);
+      transform: scale(1.05);
+    }
+    .color-custom-row {
       display: flex;
       align-items: center;
       gap: 8px;
-      cursor: pointer;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      transition: background 0.15s;
+      padding-top: 8px;
+      border-top: 1px solid var(--gray-200);
     }
-    .dataset-option:hover:not(.disabled) {
-      background: var(--gray-50);
-    }
-    .dataset-option input[type="radio"] {
-      width: 16px;
-      height: 16px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-    .dataset-option.disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    .dataset-option.disabled input {
-      cursor: not-allowed;
-    }
-    .dataset-label {
-      font-size: 13px;
-      color: var(--gray-700);
-    }
-    .dataset-badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      background: var(--gray-200);
+    .color-custom-label {
+      font-size: 11px;
       color: var(--gray-500);
-      border-radius: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+    .color-input-small {
+      width: 36px;
+      height: 36px;
+      padding: 2px;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+    }
+    .color-input-small:hover {
+      border-color: var(--gray-400);
+    }
+    .color-hex-display {
+      font-size: 12px;
+      font-family: monospace;
+      color: var(--gray-600);
+      background: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--gray-200);
     }
 
-    /* Colorscale Preview */
-    .colorscale-preview {
+    /* ========================================
+       SIDEBAR MENU SYSTEM
+       ======================================== */
+    .app-layout {
+      display: flex;
+      min-height: calc(100vh - 80px);
+      position: relative;
+    }
+
+    /* Menu Toggle Button in Header */
+    .menu-toggle {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: transparent;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
+      transition: all 0.15s;
+      position: relative;
+      margin-right: 12px;
+    }
+    .menu-toggle:hover {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .menu-toggle.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+      color: white;
+    }
+    .menu-toggle svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Menu Panel */
+    .menu-panel {
+      position: fixed;
+      left: 0;
+      top: 80px;
+      width: 340px;
+      height: calc(100vh - 80px);
+      background: white;
+      border-right: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-md);
+      z-index: 150;
+      overflow-y: auto;
+      overflow-x: hidden;
+      transform: translateX(-100%);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+      padding: 20px;
+    }
+    .menu-panel.visible {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .menu-section {
+      display: block;
+    }
+
+    .menu-section-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      margin: 0 -20px 20px -20px;
+      padding: 14px 20px 14px 18px;
+      background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+      position: relative;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+    }
+    .menu-section-title svg {
+      width: 16px;
+      height: 16px;
+      color: rgba(255,255,255,0.9);
+      flex-shrink: 0;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1;
+      margin-left: 0;
+      padding: 20px;
+      transition: margin-left 0.25s ease;
+    }
+    .main-content.panel-open {
+      margin-left: 340px;
+    }
+
+    .plot-wrapper {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+    }
+    .plot-wrapper #plot {
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Dataset selector in header */
+    .dataset-select {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dataset-select label {
+      font-size: 13px;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+    .dataset-select select {
+      height: 32px;
+      padding: 0 28px 0 10px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      background: white;
+      cursor: pointer;
+    }
+
+    /* Compact form styles for menu panel */
+    .menu-panel .form-row {
+      grid-template-columns: 1fr;
+    }
+    .menu-panel .subsection {
+      margin-bottom: 16px;
+    }
+    .menu-panel .radio-cards {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .menu-panel .radio-card-content {
+      padding: 10px 12px;
+    }
+    .menu-panel .radio-card-content svg {
       width: 24px;
       height: 24px;
-      border-radius: 4px;
-      border: 1px solid var(--gray-300);
-      flex-shrink: 0;
+    }
+    .menu-panel .toggle-group {
+      flex-wrap: wrap;
+    }
+
+    /* Stack inline flex rows vertically in menu */
+    .menu-panel .form-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    /* Left align all menu content - override Bulma */
+    .menu-panel,
+    .menu-panel * {
+      text-align: left !important;
+    }
+    .menu-panel .form-group {
+      align-items: stretch;
+      width: 100%;
+    }
+    .menu-panel .form-group select,
+    .menu-panel .form-group input[type="text"],
+    .menu-panel .colorscale-dropdown {
+      width: 100%;
+    }
+    .menu-panel .subsection-title {
+      justify-content: flex-start;
+    }
+    .menu-panel .filter-group {
+      justify-content: flex-start;
+    }
+    .menu-panel .filter-group input[type="number"] {
+      text-align: center !important;
+    }
+    .menu-panel input[type="number"][id$="-num"] {
+      text-align: center !important;
+    }
+
+    /* Section dividers in menu */
+    .menu-section + .menu-section {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 2px solid var(--gray-300);
+    }
+
+    /* Export buttons in menu */
+    .export-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .export-section .btn {
+      width: 100%;
+      justify-content: center;
     }
 
     /* Custom Colorscale Dropdown */
@@ -534,7 +680,7 @@
       border-radius: var(--radius-sm);
       box-shadow: var(--shadow-md);
       z-index: 100;
-      max-height: 280px;
+      max-height: 450px;
       overflow-y: auto;
       display: none;
     }
@@ -570,158 +716,180 @@
   </style>
 </head>
 <body>
-  <section class="hero is-light">
-    <div class="hero-body py-4">
-      <div class="container">
-        <h1 class="title">Connected Persistence Diagram Viewer</h1>
-        <p class="subtitle">Visualizing connected persistence diagrams from the SiO₂ dataset</p>
+  <!-- Header -->
+  <header style="height: 80px; background: white; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; padding: 0 24px; position: fixed; top: 0; left: 0; right: 0; z-index: 300;">
+    <button class="menu-toggle active" id="menu-toggle" title="Toggle Settings Panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div style="display: flex; align-items: center; gap: 16px; flex: 1;">
+      <h1 style="font-size: 18px; font-weight: 600; color: var(--gray-800); margin: 0;">Connected Persistence Diagram Viewer</h1>
+      <span style="color: var(--gray-400);">|</span>
+      <div class="dataset-select">
+        <label>Dataset:</label>
+        <select id="dataset-select">
+          <option value="si100">SiO₂ - Si 100% deleted</option>
+          <option value="o50">SiO₂ - O 50% deleted</option>
+        </select>
       </div>
     </div>
-  </section>
+    <a href="./index.html" style="color: var(--gray-500); font-size: 13px; text-decoration: none;">← Back to Homepage</a>
+  </header>
 
-  <div class="container">
-    <!-- Data Selection -->
-    <div class="control-panel">
-      <div class="section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        Dataset
-      </div>
-      <div class="dataset-options">
-        <label class="dataset-option">
-          <input type="radio" name="dataset" value="si100" checked>
-          <span class="dataset-label">SiO₂ - Si atoms 100% deleted</span>
-        </label>
-        <label class="dataset-option">
-          <input type="radio" name="dataset" value="o50">
-          <span class="dataset-label">SiO₂ - O atoms 50% deleted</span>
-        </label>
-        <label class="dataset-option disabled">
-          <input type="radio" name="dataset" value="custom" disabled>
-          <span class="dataset-label">Custom Data</span>
-          <span class="dataset-badge">Coming soon</span>
-        </label>
-      </div>
-    </div>
+  <!-- App Layout -->
+  <div class="app-layout" style="padding-top: 80px;">
 
-    <!-- Visualization Controls -->
-    <div class="control-panel">
-
-      <!-- LAYOUT MODE -->
-      <div class="section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="21" x2="21" y2="3"/></svg>
-        Layout Mode
+    <!-- Menu Panel -->
+    <div class="menu-panel visible" id="menu-panel">
+      <!-- Layout Section -->
+      <div class="menu-section" data-section="layout">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><line x1="3" y1="21" x2="21" y2="3"/></svg>
+          Layout
+        </div>
+        <div class="radio-cards">
+          <label class="radio-card">
+            <input type="radio" name="layout-mode" value="overlapping" checked>
+            <div class="radio-card-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <line x1="3" y1="21" x2="21" y2="3"/>
+                <circle cx="11" cy="7" r="2" fill="currentColor"/>
+                <circle cx="7" cy="12" r="2" fill="currentColor"/>
+              </svg>
+              <div class="radio-card-text">
+                Stacked
+                <small>Both diagrams in upper triangle</small>
+              </div>
+            </div>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="layout-mode" value="complementary">
+            <div class="radio-card-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <line x1="3" y1="21" x2="21" y2="3"/>
+                <circle cx="16" cy="14" r="2" fill="currentColor"/>
+                <circle cx="7" cy="10" r="2" fill="currentColor"/>
+              </svg>
+              <div class="radio-card-text">
+                Mirrored
+                <small>PD₁ transposed to lower triangle</small>
+              </div>
+            </div>
+          </label>
+        </div>
       </div>
-      <div class="radio-cards" style="margin-bottom: 24px;">
-        <label class="radio-card">
-          <input type="radio" name="layout-mode" value="overlapping" checked>
-          <div class="radio-card-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect width="18" height="18" x="3" y="3" rx="2"/>
-              <line x1="3" y1="21" x2="21" y2="3"/>
-              <circle cx="11" cy="7" r="2" fill="currentColor"/>
-              <circle cx="7" cy="12" r="2" fill="currentColor"/>
-              <line x1="11" y1="7" x2="7" y2="12" stroke-width="1.5"/>
-            </svg>
-            <div class="radio-card-text">
-              Stacked
-              <small>Both diagrams in upper triangle</small>
+
+      <!-- Display Section -->
+      <div class="menu-section" data-section="display">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          Display Options
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="show-grid" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Grid</span>
+            <span class="step-label" style="margin-left: 16px;">Step:</span>
+            <div class="step-buttons" id="grid-step-options" style="margin-left: 8px;">
+              <button type="button" class="step-btn" data-step="1">1</button>
+              <button type="button" class="step-btn" data-step="2">2</button>
+              <button type="button" class="step-btn" data-step="5">5</button>
+              <button type="button" class="step-btn active" data-step="10">10</button>
             </div>
           </div>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="layout-mode" value="complementary">
-          <div class="radio-card-content">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect width="18" height="18" x="3" y="3" rx="2"/>
-              <line x1="3" y1="21" x2="21" y2="3"/>
-              <circle cx="16" cy="14" r="2" fill="currentColor"/>
-              <circle cx="7" cy="10" r="2" fill="currentColor"/>
-              <line x1="16" y1="14" x2="7" y2="10" stroke-width="1.5"/>
-            </svg>
-            <div class="radio-card-text">
-              Mirrored
-              <small>PD₁ transposed to lower triangle</small>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="show-diagonal" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Diagonal Line</span>
+          </div>
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="show-frame" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Frame</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Labels Section -->
+      <div class="menu-section" data-section="labels">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/></svg>
+          Labels
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Plot Title</label>
+            <input type="text" id="plot-title" value="Connected Persistence Diagram" class="name-input" placeholder="Plot title">
+          </div>
+        </div>
+        <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label>Top</label>
+            <input type="text" id="label-top" value="" class="name-input" placeholder="Top label">
+          </div>
+          <div class="form-group">
+            <label>Bottom</label>
+            <input type="text" id="label-bottom" value="" class="name-input" placeholder="Bottom label">
+          </div>
+          <div class="form-group">
+            <label>Left</label>
+            <input type="text" id="label-left" value="" class="name-input" placeholder="Left label">
+          </div>
+          <div class="form-group">
+            <label>Right</label>
+            <input type="text" id="label-right" value="" class="name-input" placeholder="Right label">
+          </div>
+        </div>
+      </div>
+
+      <!-- Points Section -->
+      <div class="menu-section" data-section="points">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="20" r="2"/></svg>
+          Points
+        </div>
+
+        <!-- Global Point Settings -->
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+          <div class="form-group">
+            <label>Size</label>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <input type="range" id="point-size" min="3" max="20" value="8" style="flex: 1;">
+              <span id="point-size-value" style="min-width: 20px; text-align: center; font-size: 13px;">8</span>
             </div>
           </div>
-        </label>
-      </div>
-
-      <!-- DISPLAY OPTIONS -->
-      <div class="section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        Display
-      </div>
-      <div style="display: flex; gap: 32px; align-items: center; margin-bottom: 24px;">
-        <div class="toggle-group">
-          <label class="toggle">
-            <input type="checkbox" id="show-grid" checked>
-            <span class="toggle-slider"></span>
-          </label>
-          <span class="toggle-label">Grid</span>
-          <span class="step-label">Step</span>
-          <div class="step-buttons" id="grid-step-options">
-            <button type="button" class="step-btn" data-step="1">1</button>
-            <button type="button" class="step-btn" data-step="2">2</button>
-            <button type="button" class="step-btn" data-step="5">5</button>
-            <button type="button" class="step-btn active" data-step="10">10</button>
-          </div>
-        </div>
-        <div class="toggle-group">
-          <label class="toggle">
-            <input type="checkbox" id="show-diagonal" checked>
-            <span class="toggle-slider"></span>
-          </label>
-          <span class="toggle-label">Diagonal Line</span>
-        </div>
-        <div class="toggle-group">
-          <label class="toggle">
-            <input type="checkbox" id="show-frame" checked>
-            <span class="toggle-slider"></span>
-          </label>
-          <span class="toggle-label">Frame</span>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- POINTS SECTION -->
-      <div class="section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><circle cx="4" cy="4" r="2"/><circle cx="20" cy="20" r="2"/></svg>
-        Points
-      </div>
-
-      <!-- Global Point Settings -->
-      <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 16px;">
-        <div class="range-group" style="width: 120px;">
-          <label>Size <span id="point-size-value">8</span></label>
-          <input type="range" id="point-size" min="3" max="20" value="8">
-        </div>
-        <div style="flex: 1;"></div>
-        <div class="toggle-group">
-          <label class="toggle">
-            <input type="checkbox" id="same-colorscale">
-            <span class="toggle-slider"></span>
-          </label>
-          <span class="toggle-label">Same color scale</span>
-        </div>
-        <div class="form-group" id="shared-colorscale-group" style="width: 180px;">
-          <div class="colorscale-dropdown" id="shared-colorscale-dropdown" data-value="Viridis" data-disabled="true">
-            <div class="colorscale-dropdown-trigger disabled" tabindex="0">
-              <div class="cs-gradient"></div>
-              <span class="cs-name">Viridis</span>
-              <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div class="toggle-group">
+              <label class="toggle">
+                <input type="checkbox" id="same-colorscale">
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label">Same color scale</span>
             </div>
-            <div class="colorscale-dropdown-menu"></div>
+            <div class="colorscale-dropdown" id="shared-colorscale-dropdown" data-value="YlOrRd" data-disabled="true" style="width: 100%;">
+              <div class="colorscale-dropdown-trigger disabled" tabindex="0">
+                <div class="cs-gradient"></div>
+                <span class="cs-name">YlOrRd</span>
+                <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+              </div>
+              <div class="colorscale-dropdown-menu"></div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="two-col">
-        <!-- Upper Points -->
+        <!-- Upper Diagram -->
         <div class="subsection">
           <div class="subsection-title">
             <span class="dot" style="background: #1e40af;"></span>
-            Upper Diagram
+            Upper Diagram (D₂)
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -743,10 +911,10 @@
             </div>
             <div class="form-group individual-colorscale">
               <label>Color Scale</label>
-              <div class="colorscale-dropdown" id="upper-colorscale-dropdown" data-value="Blues">
+              <div class="colorscale-dropdown" id="upper-colorscale-dropdown" data-value="YlGnBu">
                 <div class="colorscale-dropdown-trigger" tabindex="0">
                   <div class="cs-gradient"></div>
-                  <span class="cs-name">Blues</span>
+                  <span class="cs-name">YlGnBu</span>
                   <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
                 </div>
                 <div class="colorscale-dropdown-menu"></div>
@@ -767,14 +935,22 @@
                 <input type="number" id="upper-filter-max" placeholder="+∞">
               </div>
             </div>
+            <div class="form-group">
+              <label>Min Lifetime</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <button type="button" class="stepper-btn" data-target="upper-lifetime-min" data-delta="-1">−</button>
+                <input type="number" id="upper-lifetime-min" placeholder="0" min="0" style="width: 50px; text-align: center;">
+                <button type="button" class="stepper-btn" data-target="upper-lifetime-min" data-delta="1">+</button>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Lower Points -->
+        <!-- Lower Diagram -->
         <div class="subsection">
           <div class="subsection-title">
             <span class="dot" style="background: #dc2626;"></span>
-            Lower Diagram
+            Lower Diagram (D₁)
           </div>
           <div class="form-row">
             <div class="form-group">
@@ -796,10 +972,10 @@
             </div>
             <div class="form-group individual-colorscale">
               <label>Color Scale</label>
-              <div class="colorscale-dropdown" id="lower-colorscale-dropdown" data-value="Reds">
+              <div class="colorscale-dropdown" id="lower-colorscale-dropdown" data-value="YlOrRd">
                 <div class="colorscale-dropdown-trigger" tabindex="0">
                   <div class="cs-gradient"></div>
-                  <span class="cs-name">Reds</span>
+                  <span class="cs-name">YlOrRd</span>
                   <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
                 </div>
                 <div class="colorscale-dropdown-menu"></div>
@@ -820,51 +996,29 @@
                 <input type="number" id="lower-filter-max" placeholder="+∞">
               </div>
             </div>
+            <div class="form-group">
+              <label>Min Lifetime</label>
+              <div style="display: flex; align-items: center; gap: 4px;">
+                <button type="button" class="stepper-btn" data-target="lower-lifetime-min" data-delta="-1">−</button>
+                <input type="number" id="lower-lifetime-min" placeholder="0" min="0" style="width: 50px; text-align: center;">
+                <button type="button" class="stepper-btn" data-target="lower-lifetime-min" data-delta="1">+</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="divider"></div>
+      <!-- Connections Section -->
+      <div class="menu-section" data-section="connections">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20L20 4"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="4" r="2"/></svg>
+          Connections
+        </div>
 
-      <!-- LINES SECTION -->
-      <div class="section-header">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20L20 4"/><circle cx="4" cy="20" r="2"/><circle cx="20" cy="4" r="2"/></svg>
-        Connections
-      </div>
-
-      <div class="subsection">
-        <div class="form-row">
+        <div class="form-row" style="margin-bottom: 16px;">
           <div class="form-group">
             <label>Name</label>
             <input type="text" id="line-name" value="Connections" class="name-input" placeholder="Connections">
-          </div>
-          <div class="form-group">
-            <label>Color Mode</label>
-            <div style="display: flex; gap: 12px; align-items: center; height: 36px;">
-              <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px; text-transform: none; font-weight: 400; color: var(--gray-700);">
-                <input type="radio" name="line-color-mode" value="single" checked style="accent-color: var(--primary);">
-                Single
-              </label>
-              <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px; text-transform: none; font-weight: 400; color: var(--gray-700);">
-                <input type="radio" name="line-color-mode" value="scale" style="accent-color: var(--primary);">
-                By Multiplicity
-              </label>
-            </div>
-          </div>
-          <div class="form-group" id="line-single-color-group">
-            <label>Color</label>
-            <input type="color" id="line-single-color" value="#808080" style="width: 60px; height: 36px; padding: 2px; border: 1px solid var(--gray-200); border-radius: 4px; cursor: pointer;">
-          </div>
-          <div class="form-group" id="line-colorscale-group" style="display: none;">
-            <label>Color Scale</label>
-            <div class="colorscale-dropdown" id="line-colorscale-dropdown" data-value="Viridis">
-              <div class="colorscale-dropdown-trigger" tabindex="0">
-                <div class="cs-gradient"></div>
-                <span class="cs-name">Viridis</span>
-                <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
-              </div>
-              <div class="colorscale-dropdown-menu"></div>
-            </div>
           </div>
           <div class="form-group">
             <label>Filter (multiplicity)</label>
@@ -875,7 +1029,69 @@
             </div>
           </div>
         </div>
-        <div class="form-row" style="margin-top: 12px;">
+
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label>Color Mode</label>
+          <div style="display: flex; gap: 16px; align-items: center; margin-top: 6px;">
+            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px; text-transform: none; font-weight: 400; color: var(--gray-700);">
+              <input type="radio" name="line-color-mode" value="scale" checked style="accent-color: var(--primary);">
+              By Multiplicity
+            </label>
+            <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 13px; text-transform: none; font-weight: 400; color: var(--gray-700);">
+              <input type="radio" name="line-color-mode" value="single" style="accent-color: var(--primary);">
+              Single
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom: 16px;">
+          <div class="form-group" id="line-single-color-group" style="flex: 1.5; display: none;">
+            <label>Color</label>
+            <div class="color-picker-wrapper">
+              <div class="color-presets-grid">
+                <!-- Grayscale row -->
+                <button type="button" class="color-preset" data-color="#000000" style="background: #000000;" title="Black"></button>
+                <button type="button" class="color-preset" data-color="#374151" style="background: #374151;" title="Slate"></button>
+                <button type="button" class="color-preset" data-color="#6b7280" style="background: #6b7280;" title="Gray"></button>
+                <button type="button" class="color-preset active" data-color="#9ca3af" style="background: #9ca3af;" title="Cool Gray"></button>
+                <button type="button" class="color-preset" data-color="#d1d5db" style="background: #d1d5db;" title="Light Gray"></button>
+                <button type="button" class="color-preset" data-color="#f3f4f6" style="background: #f3f4f6; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);" title="Off White"></button>
+                <!-- Data viz categorical (bold, accessible) -->
+                <button type="button" class="color-preset" data-color="#e60049" style="background: #e60049;" title="Red"></button>
+                <button type="button" class="color-preset" data-color="#0bb4ff" style="background: #0bb4ff;" title="Sky Blue"></button>
+                <button type="button" class="color-preset" data-color="#50e991" style="background: #50e991;" title="Mint"></button>
+                <button type="button" class="color-preset" data-color="#e6d800" style="background: #e6d800;" title="Yellow"></button>
+                <button type="button" class="color-preset" data-color="#9b19f5" style="background: #9b19f5;" title="Purple"></button>
+                <button type="button" class="color-preset" data-color="#ffa300" style="background: #ffa300;" title="Orange"></button>
+                <!-- Deeper tones (professional) -->
+                <button type="button" class="color-preset" data-color="#1984c5" style="background: #1984c5;" title="Steel Blue"></button>
+                <button type="button" class="color-preset" data-color="#c23728" style="background: #c23728;" title="Crimson"></button>
+                <button type="button" class="color-preset" data-color="#22a7f0" style="background: #22a7f0;" title="Azure"></button>
+                <button type="button" class="color-preset" data-color="#54bebe" style="background: #54bebe;" title="Teal"></button>
+                <button type="button" class="color-preset" data-color="#dc0ab4" style="background: #dc0ab4;" title="Magenta"></button>
+                <button type="button" class="color-preset" data-color="#00bfa0" style="background: #00bfa0;" title="Emerald"></button>
+              </div>
+              <div class="color-custom-row">
+                <span class="color-custom-label">Custom:</span>
+                <input type="color" id="line-single-color" value="#9ca3af" class="color-input-small">
+                <span class="color-hex-display" id="color-hex-display">#9CA3AF</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group" id="line-colorscale-group">
+            <label>Color Scale</label>
+            <div class="colorscale-dropdown" id="line-colorscale-dropdown" data-value="Greys">
+              <div class="colorscale-dropdown-trigger" tabindex="0">
+                <div class="cs-gradient"></div>
+                <span class="cs-name">Greys</span>
+                <svg class="cs-arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4.5L6 7.5L9 4.5"/></svg>
+              </div>
+              <div class="colorscale-dropdown-menu"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
           <div class="form-group">
             <label>Width</label>
             <div style="display: flex; gap: 6px; align-items: center;">
@@ -893,47 +1109,37 @@
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <!-- EXPORT -->
-      <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button class="btn btn-outline" onclick="exportSVG()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          Export SVG
-        </button>
-        <button class="btn btn-primary" onclick="exportPNG()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-          Export PNG
-        </button>
+      <!-- Export Section -->
+      <div class="menu-section" data-section="export">
+        <div class="menu-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Export
+        </div>
+        <div class="export-section">
+          <button class="btn btn-outline" onclick="exportSVG()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Export as SVG
+          </button>
+          <button class="btn btn-primary" onclick="exportPNG()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Export as PNG
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Plot Area -->
-    <div class="plot-container">
-      <div id="plot" style="width: 100%; aspect-ratio: 1.1;"></div>
-    </div>
+    <!-- Main Content -->
+    <main class="main-content panel-open" id="main-content">
+      <div class="plot-wrapper">
+        <div id="plot"></div>
+      </div>
+    </main>
   </div>
-
-  <footer class="footer py-4">
-    <div class="content has-text-centered">
-      <p>Connected Persistence Diagram Viewer - Part of the <a href="./index.html">Commutative Grids Project</a></p>
-    </div>
-  </footer>
 
   <script src="./cpd-data.js"></script>
   <script>
     // Current data
     let currentData = null;
-
-    // Custom colorscale matching original visualization
-    const CUSTOM_COLORSCALE = [
-      [0, 'rgb(255,255,255)'],      // white (low)
-      [0.2, 'rgb(255,255,0)'],      // yellow
-      [0.4, 'rgb(0,255,255)'],      // cyan
-      [0.6, 'rgb(0,100,255)'],      // blue
-      [0.8, 'rgb(255,0,255)'],      // magenta
-      [1, 'rgb(255,0,100)']         // red-magenta (high)
-    ];
 
     // Initialize data
     function initData() {
@@ -955,13 +1161,14 @@
     function parseData(data) {
       const couplings = []; // Lines connecting points
 
-      // Track UPPER and LOWER points separately
-      // UPPER: points in upper-left area (low x values)
-      // LOWER: points along diagonal (high x values, near diagonal)
+      // Track UPPER (D2) and LOWER (D1) points separately
+      // In connected persistence diagrams:
+      // - D2 (upper): second point in coupling tuple (c,d)
+      // - D1 (lower): first point in coupling tuple (a,b)
       const upperPointMap = new Map();  // key: "x,y", value: count
       const lowerPointMap = new Map();  // key: "x,y", value: count
 
-      // Helper to add/update a point
+      // Helper to add/update a point in a specific map
       function addToMap(map, x, y, count) {
         const key = `${x},${y}`;
         map.set(key, (map.get(key) || 0) + Math.abs(count));
@@ -971,30 +1178,27 @@
         const parts = key.split(',').map(Number);
 
         if (parts[0] === data.len && parts[1] === -1) {
-          // Single persistence point: "len,-1,x,y"
-          // Determine if it's UPPER or LOWER based on position
+          // Single persistence point: "len,-1,birth,death"
+          // These are uncoupled points - assign to lower (D1) as they represent
+          // the standard persistence diagram
           const x = parts[2], y = parts[3];
-          if (x < 10) {
-            addToMap(upperPointMap, x, y, value);
-          } else {
-            addToMap(lowerPointMap, x, y, value);
-          }
+          addToMap(lowerPointMap, x, y, value);
         } else if (parts.length === 4 && value !== 0) {
-          // Connected points: "a,b,c,d"
+          // Connected points: "a,b,c,d" connects (a,b) to (c,d)
+          // Format: first point (a,b) is D1 (lower), second point (c,d) is D2 (upper)
           const a = parts[0], b = parts[1], c = parts[2], d = parts[3];
 
-          // Add the LOWER point (a, b) - near diagonal
+          // Add first point to D1 (lower)
           addToMap(lowerPointMap, a, b, Math.abs(value));
-
-          // Add the UPPER point (c, d) - in upper-left
+          // Add second point to D2 (upper)
           addToMap(upperPointMap, c, d, Math.abs(value));
 
           // Check if this is NOT a self-coupling
           if (!(a === c && b === d)) {
-            // Line from LOWER point (a,b) to UPPER point (c,d)
+            // Line from D1 point (a,b) to D2 point (c,d)
             couplings.push({
-              x1: a, y1: b,  // LOWER point
-              x2: c, y2: d,  // UPPER point
+              x1: a, y1: b,  // D1 point (lower/first)
+              x2: c, y2: d,  // D2 point (upper/second)
               weight: value
             });
           }
@@ -1015,16 +1219,6 @@
       }
 
       return { pdUpper, pdLower, couplings, len: data.len };
-    }
-
-    // ============================================
-    // Get colorscale based on selection
-    // ============================================
-    function getColorscale(name) {
-      if (name === 'custom') {
-        return CUSTOM_COLORSCALE;
-      }
-      return name;
     }
 
     // ============================================
@@ -1091,37 +1285,30 @@
     // ============================================
     // Colorscale gradients for previews
     // ============================================
-    // Gradients based on Plotly.js source: https://github.com/plotly/plotly.js/blob/master/src/components/colorscale/scales.js
+    // Official Plotly.js colorscales: https://plotly.com/javascript/colorscales/
     const COLORSCALE_GRADIENTS = {
-      'Viridis': 'linear-gradient(to right, #440154, #3b528b, #21918c, #5ec962, #fde725)',
-      'Plasma': 'linear-gradient(to right, #0d0887, #7e03a8, #cc4778, #f89540, #f0f921)',
-      'Inferno': 'linear-gradient(to right, #000004, #57106e, #bc3754, #f98e09, #fcffa4)',
-      'Magma': 'linear-gradient(to right, #000004, #51127c, #b73779, #fe9f6d, #fcfdbf)',
-      'Cividis': 'linear-gradient(to right, #00204c, #7c7b78, #ffe945)',
-      'Blues': 'linear-gradient(to right, #050aac, #4664f5, #6a89f7, #dcdcdc)',
-      'Greens': 'linear-gradient(to right, #00441b, #006d2c, #74c476, #c7e9c0, #f7fcf5)',
-      'Reds': 'linear-gradient(to right, #dcdcdc, #f5c39d, #f5a069, #b20a1c)',
-      'Greys': 'linear-gradient(to right, #000000, #ffffff)',
-      'YlGnBu': 'linear-gradient(to right, #081d58, #253494, #1d91c0, #7fcdbb, #c7e9b4, #ffffd9)',
       'YlOrRd': 'linear-gradient(to right, #800026, #bd0026, #fc4e2a, #feb24c, #fed976, #ffffcc)',
+      'YlGnBu': 'linear-gradient(to right, #081d58, #253494, #1d91c0, #7fcdbb, #c7e9b4, #ffffd9)',
       'RdBu': 'linear-gradient(to right, #050aac, #6a89f7, #bebebe, #e69a5a, #b20a1c)',
-      'Picnic': 'linear-gradient(to right, #0000ff, #66ccff, #ffffff, #ff99ff, #ff0000)',
       'Portland': 'linear-gradient(to right, #0c3383, #0a88ba, #f2d338, #f28f38, #d91e1e)',
+      'Picnic': 'linear-gradient(to right, #0000ff, #66ccff, #ffffff, #ff99ff, #ff0000)',
       'Jet': 'linear-gradient(to right, #000083, #003caa, #05ffff, #ffff00, #fa0000, #800000)',
       'Hot': 'linear-gradient(to right, #000000, #e60000, #ffd200, #ffffff)',
-      'Blackbody': 'linear-gradient(to right, #000000, #e60000, #e6d200, #ffffff, #a0c8ff)',
+      'Greys': 'linear-gradient(to right, #000000, #ffffff)',
+      'Greens': 'linear-gradient(to right, #00441b, #006d2c, #74c476, #c7e9c0, #f7fcf5)',
+      'Electric': 'linear-gradient(to right, #000000, #1e0064, #780064, #a05a00, #e6c800, #fffadc)',
       'Earth': 'linear-gradient(to right, #000082, #00b4b4, #28d228, #e6e632, #784614, #ffffff)',
-      'Electric': 'linear-gradient(to right, #000000, #1e0064, #780064, #a05a00, #e6c800, #fffadc)'
+      'Bluered': 'linear-gradient(to right, #0000ff, #ff0000)',
+      'Blackbody': 'linear-gradient(to right, #000000, #e60000, #e6d200, #ffffff, #a0c8ff)'
     };
 
     // ============================================
     // Custom Colorscale Dropdown
     // ============================================
     const COLORSCALE_OPTIONS = [
-      'Viridis', 'Plasma', 'Inferno', 'Magma', 'Cividis',
-      'Blues', 'Greens', 'Reds', 'Greys',
-      'YlGnBu', 'YlOrRd', 'RdBu',
-      'Picnic', 'Portland', 'Jet', 'Hot', 'Blackbody', 'Earth', 'Electric'
+      'YlOrRd', 'YlGnBu', 'RdBu', 'Portland', 'Picnic',
+      'Jet', 'Hot', 'Greys', 'Greens',
+      'Electric', 'Earth', 'Bluered', 'Blackbody'
     ];
 
     function initColorscaleDropdown(dropdownId) {
@@ -1132,13 +1319,13 @@
       const menu = dropdown.querySelector('.colorscale-dropdown-menu');
       const gradientEl = trigger.querySelector('.cs-gradient');
       const nameEl = trigger.querySelector('.cs-name');
-      const currentValue = dropdown.dataset.value || 'Viridis';
+      const currentValue = dropdown.dataset.value || 'YlOrRd';
 
       // Update trigger display
       function updateTrigger(value) {
         dropdown.dataset.value = value;
         nameEl.textContent = value;
-        gradientEl.style.background = COLORSCALE_GRADIENTS[value] || COLORSCALE_GRADIENTS['Viridis'];
+        gradientEl.style.background = COLORSCALE_GRADIENTS[value] || COLORSCALE_GRADIENTS['YlOrRd'];
       }
 
       // Populate menu
@@ -1203,7 +1390,7 @@
 
     function getDropdownValue(dropdownId) {
       const dropdown = document.getElementById(dropdownId);
-      return dropdown ? dropdown.dataset.value : 'Viridis';
+      return dropdown ? dropdown.dataset.value : 'YlOrRd';
     }
 
     function initAllColorscaleDropdowns() {
@@ -1224,7 +1411,7 @@
     function createTraces(parsedData, options) {
       const traces = [];
       const { pdUpper, pdLower, couplings, len } = parsedData;
-      const { layout, upperName, lowerName, lineName, upperColorscale, lowerColorscale, sameColorscale, upperFilter, lowerFilter, lineColorMode, lineSingleColor, lineColorscale, lineFilter, pointSize, upperOpacity, lowerOpacity, upperShape, lowerShape, lineOpacity, lineWidth, showDiagonal } = options;
+      const { layout, upperName, lowerName, lineName, upperColorscale, lowerColorscale, sameColorscale, upperFilter, lowerFilter, lineColorMode, lineSingleColor, lineColorscale, lineFilter, upperLifetimeMin, lowerLifetimeMin, pointSize, upperOpacity, lowerOpacity, upperShape, lowerShape, lineOpacity, lineWidth, showDiagonal } = options;
 
       const isComplementary = layout === 'complementary';
 
@@ -1310,30 +1497,24 @@
           }
 
           // Create color interpolation function based on scheme
-          // Based on Plotly.js source: https://github.com/plotly/plotly.js/blob/master/src/components/colorscale/scales.js
+          // Official Plotly.js colorscales: https://plotly.com/javascript/colorscales/
           function getSchemeColor(normalizedValue, scheme) {
             const schemes = {
-              'Viridis': [[68,1,84], [59,82,139], [33,145,140], [94,201,98], [253,231,37]],
-              'Plasma': [[13,8,135], [126,3,168], [204,71,120], [248,149,64], [240,249,33]],
-              'Inferno': [[0,0,4], [87,16,110], [188,55,84], [249,142,9], [252,255,164]],
-              'Magma': [[0,0,4], [81,18,124], [183,55,121], [254,159,109], [252,253,191]],
-              'Cividis': [[0,32,76], [124,123,120], [255,233,69]],
-              'Blues': [[5,10,172], [70,100,245], [106,137,247], [220,220,220]],
-              'Greens': [[0,68,27], [0,109,44], [116,196,118], [199,233,192], [247,252,245]],
-              'Reds': [[220,220,220], [245,195,157], [245,160,105], [178,10,28]],
-              'Greys': [[0,0,0], [255,255,255]],
-              'YlGnBu': [[8,29,88], [37,52,148], [29,145,192], [127,205,187], [199,233,180], [255,255,217]],
               'YlOrRd': [[128,0,38], [189,0,38], [252,78,42], [254,178,76], [255,237,160], [255,255,204]],
+              'YlGnBu': [[8,29,88], [37,52,148], [29,145,192], [127,205,187], [199,233,180], [255,255,217]],
               'RdBu': [[5,10,172], [106,137,247], [190,190,190], [220,170,132], [178,10,28]],
-              'Picnic': [[0,0,255], [102,204,255], [255,255,255], [255,153,255], [255,0,0]],
               'Portland': [[12,51,131], [10,136,186], [242,211,56], [242,143,56], [217,30,30]],
+              'Picnic': [[0,0,255], [102,204,255], [255,255,255], [255,153,255], [255,0,0]],
               'Jet': [[0,0,131], [0,60,170], [5,255,255], [255,255,0], [250,0,0], [128,0,0]],
               'Hot': [[0,0,0], [230,0,0], [255,210,0], [255,255,255]],
-              'Blackbody': [[0,0,0], [230,0,0], [230,210,0], [255,255,255], [160,200,255]],
+              'Greys': [[0,0,0], [255,255,255]],
+              'Greens': [[0,68,27], [0,109,44], [116,196,118], [199,233,192], [247,252,245]],
+              'Electric': [[0,0,0], [30,0,100], [120,0,100], [160,90,0], [230,200,0], [255,250,220]],
               'Earth': [[0,0,130], [0,180,180], [40,210,40], [230,230,50], [120,70,20], [255,255,255]],
-              'Electric': [[0,0,0], [30,0,100], [120,0,100], [160,90,0], [230,200,0], [255,250,220]]
+              'Bluered': [[0,0,255], [255,0,0]],
+              'Blackbody': [[0,0,0], [230,0,0], [230,210,0], [255,255,255], [160,200,255]]
             };
-            const stops = schemes[scheme] || schemes['Viridis'];
+            const stops = schemes[scheme] || schemes['YlOrRd'];
             const idx = normalizedValue * (stops.length - 1);
             const low = Math.floor(idx);
             const high = Math.min(Math.ceil(idx), stops.length - 1);
@@ -1408,8 +1589,9 @@
       }
 
       // Add UPPER persistence diagram points (always in upper-left triangle)
-      const filteredUpper = pdUpper.filter(p => passesFilter(p.count, upperFilter));
-      const filteredLower = pdLower.filter(p => passesFilter(p.count, lowerFilter));
+      // Filter by both multiplicity and lifetime (death - birth)
+      const filteredUpper = pdUpper.filter(p => passesFilter(p.count, upperFilter) && (p.y - p.x) >= upperLifetimeMin);
+      const filteredLower = pdLower.filter(p => passesFilter(p.count, lowerFilter) && (p.y - p.x) >= lowerLifetimeMin);
 
       // Calculate combined max for shared colorscale
       const maxFilteredUpperCount = filteredUpper.length > 0 ? Math.max(...filteredUpper.map(p => p.count), 1) : 1;
@@ -1438,6 +1620,7 @@
         };
 
         traces.push({
+          type: 'scatter',
           x: filteredUpper.map(p => p.x),
           y: filteredUpper.map(p => p.y),
           mode: 'markers',
@@ -1445,11 +1628,10 @@
             size: pointSize,
             opacity: upperOpacity,
             color: filteredUpper.map(p => p.count),
-            colorscale: getColorscale(upperColorscale),
+            colorscale: upperColorscale,
             cmin: 1,
             cmax: sameColorscale ? combinedMax : maxFilteredUpperCount,
             colorbar: colorbarConfig,
-            line: { color: '#333', width: 0.5 },
             symbol: upperShape
           },
           text: filteredUpper.map(p => `${latexToUnicode(upperName)}<br>Birth: ${p.x}<br>Death: ${p.y}<br>Count: ${p.count}`),
@@ -1477,10 +1659,9 @@
           size: pointSize,
           opacity: lowerOpacity,
           color: filteredLower.map(p => p.count),
-          colorscale: getColorscale(lowerColorscale),
+          colorscale: lowerColorscale,
           cmin: 1,
           cmax: sameColorscale ? combinedMax : maxFilteredLowerCount,
-          line: { color: '#333', width: 0.5 },
           symbol: lowerShape
         };
 
@@ -1499,6 +1680,7 @@
         }
 
         traces.push({
+          type: 'scatter',
           x: lowerX,
           y: lowerY,
           mode: 'markers',
@@ -1554,6 +1736,36 @@
     }
 
     // ============================================
+    // Export filename helper
+    // ============================================
+    const DATASET_NAMES = {
+      'si100': 'SiO2_Si-all-removed',
+      'o50': 'SiO2_O-half-removed'
+    };
+
+    function getExportFilename() {
+      const datasetEl = document.getElementById('dataset-select');
+      const layoutRadio = document.querySelector('input[name="layout-mode"]:checked');
+      const showGrid = document.getElementById('show-grid')?.checked;
+      const gridStep = document.querySelector('.step-btn.active')?.dataset.step || '10';
+      const showFrame = document.getElementById('show-frame')?.checked;
+      const upperLifetime = parseFloat(document.getElementById('upper-lifetime-min').value) || 0;
+      const lowerLifetime = parseFloat(document.getElementById('lower-lifetime-min').value) || 0;
+
+      const dataset = datasetEl ? datasetEl.value : 'si100';
+      const layoutValue = layoutRadio ? layoutRadio.value : 'overlapping';
+      const layoutName = layoutValue === 'complementary' ? 'mirrored' : 'stacked';
+      const datasetName = DATASET_NAMES[dataset] || dataset;
+      const gridPart = showGrid ? `grid${gridStep}` : 'nogrid';
+      const framePart = showFrame ? 'frame' : 'noframe';
+      const lifetimePart = (upperLifetime > 0 || lowerLifetime > 0)
+        ? `_lifetime-D2ge${upperLifetime}-D1ge${lowerLifetime}`
+        : '';
+
+      return `cPD_${datasetName}_${layoutName}_${gridPart}_${framePart}${lifetimePart}`;
+    }
+
+    // ============================================
     // Update plot
     // ============================================
     function updatePlot() {
@@ -1588,6 +1800,8 @@
         lineSingleColor: document.getElementById('line-single-color').value,
         lineColorscale: getDropdownValue('line-colorscale-dropdown'),
         lineFilter: getFilter('line'),
+        upperLifetimeMin: parseFloat(document.getElementById('upper-lifetime-min').value) || 0,
+        lowerLifetimeMin: parseFloat(document.getElementById('lower-lifetime-min').value) || 0,
         pointSize: parseInt(document.getElementById('point-size').value),
         upperOpacity: parseFloat(document.getElementById('upper-opacity').value),
         lowerOpacity: parseFloat(document.getElementById('lower-opacity').value),
@@ -1598,7 +1812,12 @@
         showGrid: document.getElementById('show-grid').checked,
         showDiagonal: document.getElementById('show-diagonal').checked,
         showFrame: document.getElementById('show-frame').checked,
-        gridStep: parseInt(document.querySelector('.step-btn.active')?.dataset.step) || 10
+        gridStep: parseInt(document.querySelector('.step-btn.active')?.dataset.step) || 10,
+        plotTitle: document.getElementById('plot-title').value,
+        labelTop: document.getElementById('label-top').value,
+        labelBottom: document.getElementById('label-bottom').value,
+        labelLeft: document.getElementById('label-left').value,
+        labelRight: document.getElementById('label-right').value
       };
 
       const parsedData = parseData(currentData);
@@ -1606,12 +1825,8 @@
 
       const plotLayout = {
         title: {
-          text: 'Connected Persistence Diagram',
-          font: { size: 18 },
-          y: 1,
-          yref: 'paper',
-          yanchor: 'bottom',
-          pad: { b: 30 }
+          text: options.plotTitle,
+          font: { size: 18 }
         },
         xaxis: {
           range: [0, currentData.len],
@@ -1631,7 +1846,7 @@
           linewidth: 1,
           mirror: options.showFrame,
           fixedrange: true,
-          domain: [0, 0.78]
+          domain: [0, 0.88]
         },
         yaxis: {
           range: [0, currentData.len],
@@ -1654,23 +1869,91 @@
         showlegend: true,
         legend: {
           x: 0.5,
-          y: 1.0,
+          y: 1.01,
           xanchor: 'center',
           yanchor: 'bottom',
           orientation: 'h'
         },
-        margin: { l: 60, r: 40, t: 70, b: 50 },
+        annotations: [
+          // Top label
+          options.labelTop && {
+            text: options.labelTop,
+            x: 0.44,
+            y: 1.08,
+            xref: 'paper',
+            yref: 'paper',
+            xanchor: 'center',
+            yanchor: 'bottom',
+            showarrow: false,
+            font: { size: 14 }
+          },
+          // Bottom label
+          options.labelBottom && {
+            text: options.labelBottom,
+            x: 0.44,
+            y: -0.08,
+            xref: 'paper',
+            yref: 'paper',
+            xanchor: 'center',
+            yanchor: 'top',
+            showarrow: false,
+            font: { size: 14 }
+          },
+          // Left label
+          options.labelLeft && {
+            text: options.labelLeft,
+            x: -0.08,
+            y: 0.5,
+            xref: 'paper',
+            yref: 'paper',
+            xanchor: 'center',
+            yanchor: 'middle',
+            textangle: -90,
+            showarrow: false,
+            font: { size: 14 }
+          },
+          // Right label
+          options.labelRight && {
+            text: options.labelRight,
+            x: 0.92,
+            y: 0.5,
+            xref: 'paper',
+            yref: 'paper',
+            xanchor: 'center',
+            yanchor: 'middle',
+            textangle: 90,
+            showarrow: false,
+            font: { size: 14 }
+          },
+          // Lifetime filter info (under colorbar area)
+          (options.upperLifetimeMin > 0 || options.lowerLifetimeMin > 0) && {
+            text: [
+              options.upperLifetimeMin > 0 ? `${latexToUnicode(options.upperName)} lifetime≥${options.upperLifetimeMin}` : '',
+              options.lowerLifetimeMin > 0 ? `${latexToUnicode(options.lowerName)} lifetime≥${options.lowerLifetimeMin}` : ''
+            ].filter(Boolean).join('<br>'),
+            x: 0.88,
+            y: 0.08,
+            xref: 'paper',
+            yref: 'paper',
+            xanchor: 'center',
+            yanchor: 'top',
+            showarrow: false,
+            font: { size: 10, color: '#666' }
+          }
+        ].filter(Boolean),
+        margin: { l: 60, r: 40, t: 80, b: 50 },
         plot_bgcolor: 'white',
         paper_bgcolor: 'white'
       };
 
+      const plotEl = document.getElementById('plot');
       const config = {
         responsive: true,
         toImageButtonOptions: {
           format: 'svg',
-          filename: 'cpd_diagram',
-          height: 800,
-          width: 800,
+          filename: getExportFilename(),
+          height: plotEl ? plotEl.offsetHeight : 800,
+          width: plotEl ? plotEl.offsetWidth : 800,
           scale: 2
         }
       };
@@ -1681,57 +1964,125 @@
     // ============================================
     // Export functions
     // ============================================
+    function getPlotDimensions() {
+      const plotEl = document.getElementById('plot');
+      return {
+        width: plotEl.offsetWidth || 800,
+        height: plotEl.offsetHeight || 800
+      };
+    }
+
     function exportSVG() {
+      const dims = getPlotDimensions();
       Plotly.downloadImage('plot', {
         format: 'svg',
-        filename: 'cpd_diagram',
-        height: 800,
-        width: 800
+        filename: getExportFilename(),
+        height: dims.height,
+        width: dims.width
       });
     }
 
     function exportPNG() {
+      const dims = getPlotDimensions();
       Plotly.downloadImage('plot', {
         format: 'png',
-        filename: 'cpd_diagram',
-        height: 800,
-        width: 800,
+        filename: getExportFilename(),
+        height: dims.height,
+        width: dims.width,
         scale: 2
       });
     }
 
     // ============================================
-    // Load custom data
+    // Menu Panel System
     // ============================================
-    function loadCustomData() {
-      const textarea = document.getElementById('custom-data');
-      const text = textarea.value.trim();
+    let isPinned = true; // Default: pinned (visible)
+    let hideTimeout = null;
+    const HIDE_DELAY = 300; // ms delay before hiding menu
 
-      try {
-        const dec = {};
-        let len = 70;
+    function showMenu() {
+      const menuPanel = document.getElementById('menu-panel');
+      const mainContent = document.getElementById('main-content');
+      const menuToggle = document.getElementById('menu-toggle');
 
-        const lenMatch = text.match(/len\s*=\s*(\d+)/);
-        if (lenMatch) {
-          len = parseInt(lenMatch[1]);
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+        hideTimeout = null;
+      }
+
+      menuPanel.classList.add('visible');
+      mainContent.classList.add('panel-open');
+      menuToggle.classList.add('active');
+    }
+
+    function hideMenu() {
+      if (isPinned) return;
+
+      hideTimeout = setTimeout(() => {
+        const menuPanel = document.getElementById('menu-panel');
+        const mainContent = document.getElementById('main-content');
+        const menuToggle = document.getElementById('menu-toggle');
+
+        menuPanel.classList.remove('visible');
+        mainContent.classList.remove('panel-open');
+        menuToggle.classList.remove('active');
+      }, HIDE_DELAY);
+    }
+
+    function togglePin() {
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuPanel = document.getElementById('menu-panel');
+      const mainContent = document.getElementById('main-content');
+
+      isPinned = !isPinned;
+
+      if (isPinned) {
+        menuToggle.classList.add('active');
+        menuPanel.classList.add('visible');
+        mainContent.classList.add('panel-open');
+      } else {
+        // When unpinning, start hiding
+        hideMenu();
+      }
+    }
+
+    function initMenuToggle() {
+      const menuToggle = document.getElementById('menu-toggle');
+      const menuPanel = document.getElementById('menu-panel');
+
+      // Click to toggle pin
+      menuToggle.addEventListener('click', togglePin);
+
+      // Hover to show (when not pinned)
+      menuToggle.addEventListener('mouseenter', () => {
+        if (!isPinned) {
+          showMenu();
         }
+      });
 
-        const decRegex = /dec\["([^"]+)"\]\s*=\s*(-?\d+)/g;
-        let match;
-        while ((match = decRegex.exec(text)) !== null) {
-          dec[match[1]] = parseInt(match[2]);
+      menuToggle.addEventListener('mouseleave', () => {
+        if (!isPinned) {
+          hideMenu();
         }
+      });
 
-        if (Object.keys(dec).length === 0) {
-          alert('No data entries found. Please check the format.');
-          return;
+      // Keep menu open when hovering over panel
+      menuPanel.addEventListener('mouseenter', () => {
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+          hideTimeout = null;
         }
+      });
 
-        currentData = { len, dec };
-        updatePlot();
-        alert(`Loaded ${Object.keys(dec).length} data entries successfully!`);
-      } catch (e) {
-        alert('Error parsing data: ' + e.message);
+      menuPanel.addEventListener('mouseleave', () => {
+        if (!isPinned) {
+          hideMenu();
+        }
+      });
+
+      // Initialize default state (pinned = visible)
+      if (isPinned) {
+        showMenu();
       }
     }
 
@@ -1739,12 +2090,13 @@
     // Event listeners
     // ============================================
     document.addEventListener('DOMContentLoaded', function() {
-      // Dataset selection radio buttons
-      document.querySelectorAll('input[name="dataset"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-          currentData = getDataByName(this.value);
-          updatePlot();
-        });
+      // Initialize menu toggle
+      initMenuToggle();
+
+      // Dataset selection dropdown
+      document.getElementById('dataset-select').addEventListener('change', function() {
+        currentData = getDataByName(this.value);
+        updatePlot();
       });
 
       // Slider value display and real-time update
@@ -1837,12 +2189,17 @@
       });
 
       // Filter range inputs
-      ['upper-filter-min', 'upper-filter-max', 'lower-filter-min', 'lower-filter-max', 'line-filter-min', 'line-filter-max'].forEach(id => {
+      ['upper-filter-min', 'upper-filter-max', 'lower-filter-min', 'lower-filter-max', 'line-filter-min', 'line-filter-max', 'upper-lifetime-min', 'lower-lifetime-min'].forEach(id => {
         document.getElementById(id).addEventListener('input', updatePlot);
       });
 
       // Name inputs
       ['upper-name', 'lower-name', 'line-name'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updatePlot);
+      });
+
+      // Label inputs (title, axis labels)
+      ['plot-title', 'label-top', 'label-bottom', 'label-left', 'label-right'].forEach(id => {
         document.getElementById(id).addEventListener('input', updatePlot);
       });
 
@@ -1862,6 +2219,44 @@
           document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
           updatePlot();
+        });
+      });
+
+      // Lifetime stepper buttons
+      document.querySelectorAll('.stepper-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const targetId = this.dataset.target;
+          const delta = parseInt(this.dataset.delta);
+          const input = document.getElementById(targetId);
+          const currentVal = parseFloat(input.value) || 0;
+          const newVal = Math.max(0, currentVal + delta);
+          input.value = newVal;
+          updatePlot();
+        });
+      });
+
+      // Color preset buttons
+      document.querySelectorAll('.color-preset').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const color = this.dataset.color;
+          const colorInput = document.getElementById('line-single-color');
+          const hexDisplay = document.getElementById('color-hex-display');
+          colorInput.value = color;
+          hexDisplay.textContent = color.toUpperCase();
+          // Update active state
+          document.querySelectorAll('.color-preset').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          updatePlot();
+        });
+      });
+
+      // Sync preset active state and hex display when color picker changes
+      document.getElementById('line-single-color').addEventListener('input', function() {
+        const currentColor = this.value.toLowerCase();
+        const hexDisplay = document.getElementById('color-hex-display');
+        hexDisplay.textContent = this.value.toUpperCase();
+        document.querySelectorAll('.color-preset').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.color.toLowerCase() === currentColor);
         });
       });
 
