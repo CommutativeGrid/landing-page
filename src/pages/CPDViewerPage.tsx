@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import Plot from 'react-plotly.js'
 import Plotly from 'plotly.js-dist-min'
 import { DATA_SI100, DATA_O50, type CPDDataset } from '../data/cpd-data'
@@ -149,51 +150,51 @@ export default function CPDViewerPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
-              menuOpen ? 'bg-blue-500 text-white' : 'bg-transparent text-gray-500 hover:bg-gray-100'
-            }`}
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+      <header className="h-20 bg-white border-b border-gray-200 px-6 flex items-center fixed top-0 left-0 right-0 z-[300]">
+        <button
+          onClick={() => setMenuOpen(!menuOpen)}
+          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
+            menuOpen ? 'bg-blue-500 text-white' : 'bg-transparent text-gray-500 hover:bg-gray-100'
+          }`}
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div className="flex items-center gap-4 flex-1 ml-4">
           <h1 className="text-lg font-semibold text-gray-800">Connected Persistence Diagram Viewer</h1>
+          <span className="text-gray-400">|</span>
+          <div className="flex items-center gap-2">
+            <label className="text-sm text-gray-600 font-medium">Dataset:</label>
+            <select
+              value={dataset}
+              onChange={(e) => setDataset(e.target.value)}
+              className="h-9 px-3 border border-gray-200 rounded text-sm bg-white"
+            >
+              <option value="SI100">SiO₂ - Si 100% deleted</option>
+              <option value="O50">SiO₂ - O 50% deleted</option>
+            </select>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <label className="text-sm text-gray-600 font-medium">Dataset:</label>
-          <select
-            value={dataset}
-            onChange={(e) => setDataset(e.target.value)}
-            className="h-8 px-3 border border-gray-300 rounded text-sm bg-white"
-          >
-            <option value="SI100">SiO2 - Si 100% removed</option>
-            <option value="O50">SiO2 - O 50% removed</option>
-          </select>
-        </div>
+        <Link to="/" className="text-gray-500 text-sm hover:text-gray-700 transition-colors">
+          ← Back to Homepage
+        </Link>
       </header>
 
-      <div className="flex">
+      <div className="flex pt-20">
         <div
-          className={`fixed left-0 top-[57px] w-[340px] h-[calc(100vh-57px)] bg-white border-r border-gray-200 shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
+          className={`fixed left-0 top-20 w-[340px] h-[calc(100vh-80px)] bg-white border-r border-gray-200 shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
             menuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div className="p-5">
-            <div className="bg-gradient-to-r from-blue-500 to-blue-400 text-white text-xs font-bold uppercase tracking-wider py-3 px-4 -mx-5 -mt-5 mb-5 flex items-center gap-3">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-              </svg>
-              Visualization Settings
-            </div>
-
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-blue-500 rounded-sm"></span>
-                Layout Mode
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <rect width="18" height="18" x="3" y="3" rx="2" />
+                  <line x1="3" y1="21" x2="21" y2="3" />
+                </svg>
+                Layout
               </div>
               <div className="flex flex-col gap-2">
                 <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all bg-white border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
@@ -240,7 +241,10 @@ export default function CPDViewerPage() {
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-sm"></span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
                 Display Options
               </div>
               <div className="space-y-3">
@@ -294,7 +298,9 @@ export default function CPDViewerPage() {
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-purple-500 rounded-sm"></span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M4 7V4h16v3M9 20h6M12 4v16" />
+                </svg>
                 Labels
               </div>
               <div className="space-y-3">
@@ -351,7 +357,10 @@ export default function CPDViewerPage() {
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-orange-500 rounded-sm"></span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="10" />
+                  <circle cx="12" cy="12" r="4" fill="currentColor" />
+                </svg>
                 Points Configuration
               </div>
 
@@ -585,7 +594,11 @@ export default function CPDViewerPage() {
 
             <div className="bg-gray-50 rounded-lg p-4 mb-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-pink-500 rounded-sm"></span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
                 Connections Configuration
               </div>
               <div className="space-y-3">
@@ -706,7 +719,11 @@ export default function CPDViewerPage() {
 
             <div className="bg-gray-50 rounded-lg p-4">
               <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <span className="w-2 h-2 bg-teal-500 rounded-sm"></span>
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
                 Export
               </div>
               <div className="flex gap-2">
@@ -730,7 +747,7 @@ export default function CPDViewerPage() {
         <main
           className={`flex-1 p-5 transition-all duration-300 ${menuOpen ? 'ml-[340px]' : 'ml-0'}`}
         >
-          <div className="bg-white rounded-lg shadow p-5 h-[calc(100vh-97px)]">
+          <div className="bg-white rounded-lg shadow p-5 h-[calc(100vh-120px)]">
             <div ref={plotRef} className="w-full h-full">
               <Plot
                 data={traces}

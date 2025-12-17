@@ -102,7 +102,7 @@ export default function HomePage() {
             <p className="text-gray-700 mb-4">
               Explore connected persistence diagrams from the SiO₂ dataset used in the paper.
             </p>
-            <Button asChild variant="bulmaPrimary">
+            <Button asChild variant="brand">
               <Link to="/cpd-viewer">Open Viewer</Link>
             </Button>
           </div>

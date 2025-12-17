@@ -20,9 +20,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         dark:
-          "bg-neutral-800 text-white shadow hover:bg-neutral-700",
-        bulmaPrimary:
-          "bg-[#00d1b2] text-white shadow hover:bg-[#00b89c]",
+          "bg-[#363636] text-white shadow hover:bg-[#292929] rounded-full",
+        brand:
+          "bg-[#00d1b2] text-white shadow hover:bg-[#00c4a7]",
       },
       size: {
         default: "h-9 px-4 py-2",
