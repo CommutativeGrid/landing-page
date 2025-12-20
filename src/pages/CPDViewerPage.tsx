@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { Home } from 'lucide-react'
 import Plot from 'react-plotly.js'
 import Plotly from 'plotly.js-dist-min'
 import { DATA_SI100, DATA_O50, type CPDDataset } from '../data/cpd-data'
@@ -32,10 +33,10 @@ export default function CPDViewerPage() {
   const [showFrame, setShowFrame] = useState(true)
   const [gridStep, setGridStep] = useState(10)
 
-  const [plotTitle, setPlotTitle] = useState('')
+  const [plotTitle, setPlotTitle] = useState('Connected Persistence Diagram')
   const [labelTop, setLabelTop] = useState('')
-  const [labelBottom, setLabelBottom] = useState('Birth')
-  const [labelLeft, setLabelLeft] = useState('Death')
+  const [labelBottom, setLabelBottom] = useState('')
+  const [labelLeft, setLabelLeft] = useState('')
   const [labelRight, setLabelRight] = useState('')
 
   const [sameColorscale, setSameColorscale] = useState(true)
@@ -58,9 +59,11 @@ export default function CPDViewerPage() {
   const [lowerFilterMin, setLowerFilterMin] = useState<string>('')
   const [lowerFilterMax, setLowerFilterMax] = useState<string>('')
   const [upperLifetimeMin, setUpperLifetimeMin] = useState(0)
+  const [upperLifetimeMax, setUpperLifetimeMax] = useState(0)
   const [lowerLifetimeMin, setLowerLifetimeMin] = useState(0)
+  const [lowerLifetimeMax, setLowerLifetimeMax] = useState(0)
 
-  const [lineColorMode, setLineColorMode] = useState<'single' | 'scale'>('single')
+  const [lineColorMode, setLineColorMode] = useState<'single' | 'scale'>('scale')
   const [lineSingleColor, setLineSingleColor] = useState('#888888')
   const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('YlOrRd')
   const [lineFilterMin, setLineFilterMin] = useState<string>('')
@@ -92,7 +95,9 @@ export default function CPDViewerPage() {
     lineColorscale,
     lineFilter: getFilter(lineFilterMin, lineFilterMax),
     upperLifetimeMin,
+    upperLifetimeMax,
     lowerLifetimeMin,
+    lowerLifetimeMax,
     pointSize,
     upperOpacity,
     lowerOpacity,
@@ -116,24 +121,26 @@ export default function CPDViewerPage() {
 
   const handleExportSVG = useCallback(() => {
     const filename = getExportFilename(dataset, layoutMode, showGrid, gridStep, showFrame, upperLifetimeMin, lowerLifetimeMin)
-    if (plotRef.current) {
-      Plotly.downloadImage(plotRef.current, {
+    const plotElement = document.getElementById('cpd-plot')
+    if (plotElement) {
+      Plotly.downloadImage(plotElement, {
         format: 'svg',
         filename,
-        height: plotRef.current.offsetHeight || 800,
-        width: plotRef.current.offsetWidth || 800
+        height: plotElement.offsetHeight || 800,
+        width: plotElement.offsetWidth || 800
       })
     }
   }, [dataset, layoutMode, showGrid, gridStep, showFrame, upperLifetimeMin, lowerLifetimeMin])
 
   const handleExportPNG = useCallback(() => {
     const filename = getExportFilename(dataset, layoutMode, showGrid, gridStep, showFrame, upperLifetimeMin, lowerLifetimeMin)
-    if (plotRef.current) {
-      Plotly.downloadImage(plotRef.current, {
+    const plotElement = document.getElementById('cpd-plot')
+    if (plotElement) {
+      Plotly.downloadImage(plotElement, {
         format: 'png',
         filename,
-        height: plotRef.current.offsetHeight || 800,
-        width: plotRef.current.offsetWidth || 800
+        height: plotElement.offsetHeight || 800,
+        width: plotElement.offsetWidth || 800
       } as Parameters<typeof Plotly.downloadImage>[1])
     }
   }, [dataset, layoutMode, showGrid, gridStep, showFrame, upperLifetimeMin, lowerLifetimeMin])
@@ -154,7 +161,7 @@ export default function CPDViewerPage() {
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
-            menuOpen ? 'bg-blue-500 text-white' : 'bg-transparent text-gray-500 hover:bg-gray-100'
+            menuOpen ? 'bg-blue-600 text-white' : 'bg-transparent text-gray-400 hover:bg-gray-100'
           }`}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,8 +183,8 @@ export default function CPDViewerPage() {
             </select>
           </div>
         </div>
-        <Link to="/" className="text-gray-500 text-sm hover:text-gray-700 transition-colors">
-          ← Back to Homepage
+        <Link to="/" className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+          <Home className="h-5 w-5 text-gray-600" />
         </Link>
       </header>
 
@@ -188,9 +195,10 @@ export default function CPDViewerPage() {
           }`}
         >
           <div className="p-5">
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            {/* Layout Section */}
+            <div className="menu-section mb-6">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <rect width="18" height="18" x="3" y="3" rx="2" />
                   <line x1="3" y1="21" x2="21" y2="3" />
                 </svg>
@@ -239,9 +247,10 @@ export default function CPDViewerPage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            {/* Display Options Section */}
+            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="12" r="3" />
                   <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
                 </svg>
@@ -296,9 +305,10 @@ export default function CPDViewerPage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            {/* Labels Section */}
+            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path d="M4 7V4h16v3M9 20h6M12 4v16" />
                 </svg>
                 Labels
@@ -321,7 +331,8 @@ export default function CPDViewerPage() {
                       type="text"
                       value={labelTop}
                       onChange={(e) => setLabelTop(e.target.value)}
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                      placeholder="Top"
+                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
                     />
                   </div>
                   <div>
@@ -330,7 +341,8 @@ export default function CPDViewerPage() {
                       type="text"
                       value={labelBottom}
                       onChange={(e) => setLabelBottom(e.target.value)}
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                      placeholder="Bottom"
+                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
                     />
                   </div>
                   <div>
@@ -339,7 +351,8 @@ export default function CPDViewerPage() {
                       type="text"
                       value={labelLeft}
                       onChange={(e) => setLabelLeft(e.target.value)}
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                      placeholder="Left"
+                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
                     />
                   </div>
                   <div>
@@ -348,20 +361,23 @@ export default function CPDViewerPage() {
                       type="text"
                       value={labelRight}
                       onChange={(e) => setLabelRight(e.target.value)}
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                      placeholder="Right"
+                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <circle cx="12" cy="12" r="10" />
-                  <circle cx="12" cy="12" r="4" fill="currentColor" />
+            {/* Points Section */}
+            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="4" cy="4" r="2" />
+                  <circle cx="20" cy="20" r="2" />
                 </svg>
-                Points Configuration
+                Points
               </div>
 
               <div className="mb-4">
@@ -409,8 +425,12 @@ export default function CPDViewerPage() {
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="text-xs font-medium text-gray-700 mb-2">Upper Diagram (D2)</div>
+              {/* Upper Diagram Subsection */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-sm bg-blue-800"></span>
+                  Upper Diagram (D₂)
+                </div>
                 <div className="space-y-2">
                   <div>
                     <label className="text-xs text-gray-500 uppercase tracking-wide">Name</label>
@@ -453,7 +473,7 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Min</label>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
                       <input
                         type="number"
                         value={upperFilterMin}
@@ -463,7 +483,7 @@ export default function CPDViewerPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Max</label>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
                       <input
                         type="number"
                         value={upperFilterMax}
@@ -496,12 +516,26 @@ export default function CPDViewerPage() {
                         className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
                       />
                     </div>
+                    <div>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Max</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={upperLifetimeMax}
+                        onChange={(e) => setUpperLifetimeMax(parseFloat(e.target.value) || 0)}
+                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="text-xs font-medium text-gray-700 mb-2">Lower Diagram (D1)</div>
+              {/* Lower Diagram Subsection */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-sm bg-red-600"></span>
+                  Lower Diagram (D₁)
+                </div>
                 <div className="space-y-2">
                   <div>
                     <label className="text-xs text-gray-500 uppercase tracking-wide">Name</label>
@@ -544,7 +578,7 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Min</label>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
                       <input
                         type="number"
                         value={lowerFilterMin}
@@ -554,7 +588,7 @@ export default function CPDViewerPage() {
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Max</label>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
                       <input
                         type="number"
                         value={lowerFilterMax}
@@ -587,19 +621,30 @@ export default function CPDViewerPage() {
                         className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
                       />
                     </div>
+                    <div>
+                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Max</label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={lowerLifetimeMax}
+                        onChange={(e) => setLowerLifetimeMax(parseFloat(e.target.value) || 0)}
+                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4 mb-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
+            {/* Connections Section */}
+            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <path d="M4 20L20 4" />
+                  <circle cx="4" cy="20" r="2" />
+                  <circle cx="20" cy="4" r="2" />
                 </svg>
-                Connections Configuration
+                Connections
               </div>
               <div className="space-y-3">
                 <div>
@@ -618,23 +663,23 @@ export default function CPDViewerPage() {
                       <input
                         type="radio"
                         name="lineColorMode"
+                        value="scale"
+                        checked={lineColorMode === 'scale'}
+                        onChange={() => setLineColorMode('scale')}
+                        className="w-3 h-3"
+                      />
+                      <span className="text-sm text-gray-600">Colorscale</span>
+                    </label>
+                    <label className="flex items-center gap-1 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="lineColorMode"
                         value="single"
                         checked={lineColorMode === 'single'}
                         onChange={() => setLineColorMode('single')}
                         className="w-3 h-3"
                       />
                       <span className="text-sm text-gray-600">Single</span>
-                    </label>
-                    <label className="flex items-center gap-1 cursor-pointer">
-                      <input
-                        type="radio"
-                        name="lineColorMode"
-                        value="scale"
-                        checked={lineColorMode === 'scale'}
-                        onChange={() => setLineColorMode('scale')}
-                        className="w-3 h-3"
-                      />
-                      <span className="text-sm text-gray-600">By Weight</span>
                     </label>
                   </div>
                 </div>
@@ -668,7 +713,7 @@ export default function CPDViewerPage() {
                 )}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Min</label>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
                     <input
                       type="number"
                       value={lineFilterMin}
@@ -678,7 +723,7 @@ export default function CPDViewerPage() {
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Filter Max</label>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
                     <input
                       type="number"
                       value={lineFilterMax}
@@ -717,9 +762,10 @@ export default function CPDViewerPage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 rounded-lg p-4">
-              <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-2">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            {/* Export Section */}
+            <div className="menu-section pt-6 border-t-2 border-gray-300">
+              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
+                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
@@ -750,6 +796,7 @@ export default function CPDViewerPage() {
           <div className="bg-white rounded-lg shadow p-5 h-[calc(100vh-120px)]">
             <div ref={plotRef} className="w-full h-full">
               <Plot
+                divId="cpd-plot"
                 data={traces}
                 layout={plotLayout}
                 config={{

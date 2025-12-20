@@ -80,7 +80,9 @@ export interface PlotOptions {
   lineColorscale: ColorscaleName
   lineFilter: Filter
   upperLifetimeMin: number
+  upperLifetimeMax: number
   lowerLifetimeMin: number
+  lowerLifetimeMax: number
   pointSize: number
   upperOpacity: number
   lowerOpacity: number
@@ -107,13 +109,16 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
     upperColorscale, lowerColorscale, sameColorscale,
     upperFilter, lowerFilter,
     lineColorMode, lineSingleColor, lineColorscale, lineFilter,
-    upperLifetimeMin, lowerLifetimeMin,
+    upperLifetimeMin, upperLifetimeMax, lowerLifetimeMin, lowerLifetimeMax,
     pointSize, upperOpacity, lowerOpacity,
     upperShape, lowerShape,
     lineOpacity, lineWidth, showDiagonal
   } = options
 
   const isComplementary = layout === 'complementary'
+  const lineNameDisplay = latexToUnicode(lineName)
+  const upperNameDisplay = latexToUnicode(upperName)
+  const lowerNameDisplay = latexToUnicode(lowerName)
 
   if (showDiagonal) {
     traces.push({
@@ -128,9 +133,6 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
 
   if (couplings.length > 0) {
     const filteredCouplings = couplings.filter(c => passesFilter(c.weight, lineFilter))
-    const lineNameDisplay = latexToUnicode(lineName)
-    const upperNameDisplay = latexToUnicode(upperName)
-    const lowerNameDisplay = latexToUnicode(lowerName)
 
     if (lineColorMode === 'single' && filteredCouplings.length > 0) {
       const hex = lineSingleColor
@@ -167,7 +169,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           line: { color: color, width: lineWidth },
           hoverinfo: 'skip',
           showlegend: true,
-          name: lineName
+          name: lineNameDisplay
         } as Data)
 
         traces.push({
@@ -240,14 +242,15 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
         text: hoverText,
         hoverinfo: 'text',
         showlegend: true,
-        name: lineName
+        name: lineNameDisplay
       } as Data)
     }
   }
 
   const filteredUpper = pdUpper.filter(p => {
     const lifetime = p.y - p.x
-    return passesFilter(p.count, upperFilter) && lifetime >= upperLifetimeMin
+    const maxCheck = upperLifetimeMax > 0 ? lifetime <= upperLifetimeMax : true
+    return passesFilter(p.count, upperFilter) && lifetime >= upperLifetimeMin && maxCheck
   })
 
   if (filteredUpper.length > 0) {
@@ -266,7 +269,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       cmin: minCount,
       cmax: maxCount,
       colorbar: {
-        title: upperName,
+        title: upperNameDisplay,
         titleside: 'right',
         thickness: 12,
         len: 0.8,
@@ -286,13 +289,14 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       text: filteredUpper.map(p => `${latexToUnicode(upperName)}<br>Birth: ${p.x}<br>Death: ${p.y}<br>Count: ${p.count}`),
       hoverinfo: 'text',
       showlegend: true,
-      name: upperName
+      name: upperNameDisplay
     } as Data)
   }
 
   const filteredLower = pdLower.filter(p => {
     const lifetime = p.y - p.x
-    return passesFilter(p.count, lowerFilter) && lifetime >= lowerLifetimeMin
+    const maxCheck = lowerLifetimeMax > 0 ? lifetime <= lowerLifetimeMax : true
+    return passesFilter(p.count, lowerFilter) && lifetime >= lowerLifetimeMin && maxCheck
   })
 
   if (filteredLower.length > 0) {
@@ -314,7 +318,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
 
     if (!sameColorscale) {
       lowerMarkerConfig.colorbar = {
-        title: lowerName,
+        title: lowerNameDisplay,
         titleside: 'right',
         thickness: 12,
         len: 0.8,
@@ -334,7 +338,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       text: filteredLower.map(p => `${latexToUnicode(lowerName)}<br>Birth: ${p.x}<br>Death: ${p.y}<br>Count: ${p.count}`),
       hoverinfo: 'text',
       showlegend: true,
-      name: lowerName
+      name: lowerNameDisplay
     } as Data)
   }
 
@@ -382,7 +386,7 @@ export function createLayout(len: number, options: PlotOptions): Partial<Layout>
   const {
     showGrid, showFrame, gridStep, plotTitle,
     labelTop, labelBottom, labelLeft, labelRight,
-    upperLifetimeMin, lowerLifetimeMin, upperName, lowerName
+    upperLifetimeMin, upperLifetimeMax, lowerLifetimeMin, lowerLifetimeMax, upperName, lowerName
   } = options
 
   const annotations: Partial<Annotations>[] = []
@@ -418,7 +422,7 @@ export function createLayout(len: number, options: PlotOptions): Partial<Layout>
   if (labelLeft) {
     annotations.push({
       text: labelLeft,
-      x: 0.16,
+      x: 0.11,
       y: 0.5,
       xref: 'paper',
       yref: 'paper',
@@ -433,7 +437,7 @@ export function createLayout(len: number, options: PlotOptions): Partial<Layout>
   if (labelRight) {
     annotations.push({
       text: labelRight,
-      x: 0.72,
+      x: 0.77,
       y: 0.5,
       xref: 'paper',
       yref: 'paper',
@@ -445,10 +449,19 @@ export function createLayout(len: number, options: PlotOptions): Partial<Layout>
     })
   }
 
-  if (upperLifetimeMin > 0 || lowerLifetimeMin > 0) {
+  const hasLifetimeFilter = upperLifetimeMin > 0 || upperLifetimeMax > 0 || lowerLifetimeMin > 0 || lowerLifetimeMax > 0
+  if (hasLifetimeFilter) {
+    const formatRange = (min: number, max: number) => {
+      if (min > 0 && max > 0) return `${min}≤lifetime≤${max}`
+      if (min > 0) return `lifetime≥${min}`
+      if (max > 0) return `lifetime≤${max}`
+      return ''
+    }
+    const upperText = formatRange(upperLifetimeMin, upperLifetimeMax)
+    const lowerText = formatRange(lowerLifetimeMin, lowerLifetimeMax)
     const lifetimeText = [
-      upperLifetimeMin > 0 ? `${latexToUnicode(upperName)} lifetime>=${upperLifetimeMin}` : '',
-      lowerLifetimeMin > 0 ? `${latexToUnicode(lowerName)} lifetime>=${lowerLifetimeMin}` : ''
+      upperText ? `${latexToUnicode(upperName)} ${upperText}` : '',
+      lowerText ? `${latexToUnicode(lowerName)} ${lowerText}` : ''
     ].filter(Boolean).join('<br>')
 
     annotations.push({
