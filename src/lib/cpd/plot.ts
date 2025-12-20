@@ -253,31 +253,51 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
     return passesFilter(p.count, upperFilter) && lifetime >= upperLifetimeMin && maxCheck
   })
 
+  const filteredLower = pdLower.filter(p => {
+    const lifetime = p.y - p.x
+    const maxCheck = lowerLifetimeMax > 0 ? lifetime <= lowerLifetimeMax : true
+    return passesFilter(p.count, lowerFilter) && lifetime >= lowerLifetimeMin && maxCheck
+  })
+
+  // Calculate combined max for shared colorscale
+  const maxFilteredUpperCount = filteredUpper.length > 0 ? Math.max(...filteredUpper.map(p => p.count), 1) : 1
+  const maxFilteredLowerCount = filteredLower.length > 0 ? Math.max(...filteredLower.map(p => p.count), 1) : 1
+  const combinedMax = Math.max(maxFilteredUpperCount, maxFilteredLowerCount)
+
   if (filteredUpper.length > 0) {
     const upperX = filteredUpper.map(p => p.x)
     const upperY = filteredUpper.map(p => p.y)
     const upperCounts = filteredUpper.map(p => p.count)
-    const minCount = Math.min(...upperCounts)
-    const maxCount = Math.max(...upperCounts)
+
+    const colorbarConfig = sameColorscale ? {
+      title: 'Multiplicity',
+      titleside: 'right',
+      thickness: 12,
+      len: 0.8,
+      x: 0.82,
+      y: 0.5,
+      xanchor: 'left',
+      tickfont: { size: 9 }
+    } : {
+      title: upperNameDisplay,
+      titleside: 'right',
+      thickness: 12,
+      len: 0.8,
+      x: 0.82,
+      y: 0.5,
+      xanchor: 'left',
+      tickfont: { size: 9 }
+    }
 
     const upperMarkerConfig: Record<string, unknown> = {
       size: pointSize,
       symbol: upperShape,
       opacity: upperOpacity,
       color: upperCounts,
-      colorscale: sameColorscale ? upperColorscale : upperColorscale,
-      cmin: minCount,
-      cmax: maxCount,
-      colorbar: {
-        title: upperNameDisplay,
-        titleside: 'right',
-        thickness: 12,
-        len: 0.8,
-        x: sameColorscale ? 0.89 : 0.89,
-        y: 0.5,
-        xanchor: 'left',
-        tickfont: { size: 9 }
-      }
+      colorscale: upperColorscale,
+      cmin: 1,
+      cmax: sameColorscale ? combinedMax : maxFilteredUpperCount,
+      colorbar: colorbarConfig
     }
 
     traces.push({
@@ -293,18 +313,10 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
     } as Data)
   }
 
-  const filteredLower = pdLower.filter(p => {
-    const lifetime = p.y - p.x
-    const maxCheck = lowerLifetimeMax > 0 ? lifetime <= lowerLifetimeMax : true
-    return passesFilter(p.count, lowerFilter) && lifetime >= lowerLifetimeMin && maxCheck
-  })
-
   if (filteredLower.length > 0) {
     const lowerX = isComplementary ? filteredLower.map(p => p.y) : filteredLower.map(p => p.x)
     const lowerY = isComplementary ? filteredLower.map(p => p.x) : filteredLower.map(p => p.y)
     const lowerCounts = filteredLower.map(p => p.count)
-    const minCount = Math.min(...lowerCounts)
-    const maxCount = Math.max(...lowerCounts)
 
     const lowerMarkerConfig: Record<string, unknown> = {
       size: pointSize,
@@ -312,8 +324,8 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       opacity: lowerOpacity,
       color: lowerCounts,
       colorscale: sameColorscale ? upperColorscale : lowerColorscale,
-      cmin: minCount,
-      cmax: maxCount
+      cmin: 1,
+      cmax: sameColorscale ? combinedMax : maxFilteredLowerCount
     }
 
     if (!sameColorscale) {
@@ -322,7 +334,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
         titleside: 'right',
         thickness: 12,
         len: 0.8,
-        x: 0.96,
+        x: 0.89,
         y: 0.5,
         xanchor: 'left',
         tickfont: { size: 9 }
@@ -350,6 +362,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       const maxWeight = Math.max(...colorbarWeights)
       const schemeName = lineColorscale
 
+      // Position: upper at 0.82, lower at 0.89 (if !sameColorscale), connections at 0.89 or 0.96
       const connectionsColorbarX = sameColorscale ? 0.89 : 0.96
 
       traces.push({
@@ -363,7 +376,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           cmin: minWeight,
           cmax: maxWeight,
           colorbar: {
-            title: lineName,
+            title: lineNameDisplay,
             titleside: 'right',
             thickness: 12,
             len: 0.8,
