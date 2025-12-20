@@ -8,15 +8,30 @@
 // O50: 2146 entries
 // ============================================
 
+export interface CPDDataset {
+  len: number
+  dec: Record<string, number>
+}
+
+// ============================================
+// Connected Persistence Diagram Data
+// Source: SiO2 analysis from research paper
+// https://ar5iv.labs.arxiv.org/html/2310.03649
+//
+// Generated programmatically from original data files
+// SI100: 1312 entries
+// O50: 2146 entries
+// ============================================
+
 
 // Wrapped in IIFE to prevent global scope pollution
-(function() {
+
 
 // SiO2 - Si atoms 100% deleted
 
-const DATA_SI100 = (() => {
+export const DATA_SI100: CPDDataset = (() => {
   const len = 70;
-  const dec = {};
+  const dec: Record<string, number> = {};
 
   // Single persistence points (70,-1,birth,death)
   dec["70,-1,6,21"]=1;dec["70,-1,7,24"]=1;dec["70,-1,17,17"]=13;dec["70,-1,17,18"]=3;
@@ -355,9 +370,9 @@ const DATA_SI100 = (() => {
 })();
 
 // SiO2 - O atoms 50% deleted
-const DATA_O50 = (() => {
+export const DATA_O50: CPDDataset = (() => {
   const len = 70;
-  const dec = {};
+  const dec: Record<string, number> = {};
 
   // Single persistence points (70,-1,birth,death)
   dec["70,-1,6,17"]=6;dec["70,-1,6,18"]=2;dec["70,-1,6,19"]=10;dec["70,-1,6,20"]=19;
@@ -904,10 +919,7 @@ const DATA_O50 = (() => {
 })();
 
 // Export for use in viewer
-window.CPD_DATA = {
+export const CPD_DATA = {
   SI100: DATA_SI100,
   O50: DATA_O50
 };
-
-
-})();
