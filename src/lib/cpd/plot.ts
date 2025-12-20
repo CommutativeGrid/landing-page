@@ -269,21 +269,11 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
     const upperY = filteredUpper.map(p => p.y)
     const upperCounts = filteredUpper.map(p => p.count)
 
-    const colorbarConfig = sameColorscale ? {
-      title: 'Multiplicity',
-      titleside: 'right',
+    const colorbarConfig = {
+      title: { text: upperNameDisplay, side: 'top' },
       thickness: 12,
       len: 0.8,
-      x: 0.82,
-      y: 0.5,
-      xanchor: 'left',
-      tickfont: { size: 9 }
-    } : {
-      title: upperNameDisplay,
-      titleside: 'right',
-      thickness: 12,
-      len: 0.8,
-      x: 0.82,
+      x: 0.780,
       y: 0.5,
       xanchor: 'left',
       tickfont: { size: 9 }
@@ -325,16 +315,12 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       color: lowerCounts,
       colorscale: sameColorscale ? upperColorscale : lowerColorscale,
       cmin: 1,
-      cmax: sameColorscale ? combinedMax : maxFilteredLowerCount
-    }
-
-    if (!sameColorscale) {
-      lowerMarkerConfig.colorbar = {
-        title: lowerNameDisplay,
-        titleside: 'right',
+      cmax: sameColorscale ? combinedMax : maxFilteredLowerCount,
+      colorbar: {
+        title: { text: lowerNameDisplay, side: 'top' },
         thickness: 12,
         len: 0.8,
-        x: 0.89,
+        x: 0.84,
         y: 0.5,
         xanchor: 'left',
         tickfont: { size: 9 }
@@ -362,8 +348,8 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       const maxWeight = Math.max(...colorbarWeights)
       const schemeName = lineColorscale
 
-      // Position: upper at 0.82, lower at 0.89 (if !sameColorscale), connections at 0.89 or 0.96
-      const connectionsColorbarX = sameColorscale ? 0.89 : 0.96
+      // Position: upper at 0.90, lower at 0.96, connections at 1.02
+      const connectionsColorbarX = 0.90
 
       traces.push({
         x: [null],
@@ -376,8 +362,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           cmin: minWeight,
           cmax: maxWeight,
           colorbar: {
-            title: lineNameDisplay,
-            titleside: 'right',
+            title: { text: lineNameDisplay, side: 'top' },
             thickness: 12,
             len: 0.8,
             x: connectionsColorbarX,
@@ -450,7 +435,7 @@ export function createLayout(len: number, options: PlotOptions): Partial<Layout>
   if (labelRight) {
     annotations.push({
       text: labelRight,
-      x: 0.77,
+      x: 0.72,
       y: 0.5,
       xref: 'paper',
       yref: 'paper',
