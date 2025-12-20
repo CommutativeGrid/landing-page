@@ -168,8 +168,7 @@ export default function CoursesPage() {
       headerName: 'Alternating Zigzag Course',
       cellRenderer: LatticeRenderer,
       sortable: false,
-      minWidth: 460,
-      flex: 2,
+      width: 250,
       cellStyle: { display: 'flex', justifyContent: 'center', alignItems: 'center' } as CellStyle
     },
     {
@@ -180,8 +179,7 @@ export default function CoursesPage() {
       filterParams: {
         values: allTypes
       },
-      minWidth: 120,
-      flex: 1,
+      width: 100,
       cellStyle: { textAlign: 'center' } as CellStyle
     },
     {
@@ -191,8 +189,7 @@ export default function CoursesPage() {
       filterParams: {
         values: allRemarks
       },
-      minWidth: 140,
-      flex: 1,
+      width: 140,
       cellStyle: { textAlign: 'center' } as CellStyle
     }
   ], [typeComparator, allTypes, allRemarks])
@@ -306,7 +303,7 @@ export default function CoursesPage() {
 
   const renderGallery = () => {
     return (
-      <div className="grid gap-4 p-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(440px, 1fr))' }}>
+      <div className="grid gap-4 p-4" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
         {filteredPaths.map((data, index) => {
           const svg = visualizeLattice(data.path, data.ss)
           return (
@@ -362,16 +359,18 @@ export default function CoursesPage() {
               {renderGallery()}
             </>
           ) : (
-            <div className="ag-theme-alpine" style={{ height: 'calc(100vh - 200px)', width: '100%' }}>
-              <AgGridReact<PathData>
-                rowData={plotData.paths as PathData[]}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-                rowHeight={200}
-                headerHeight={48}
-                animateRows={true}
-                domLayout="normal"
-              />
+            <div className="flex justify-center">
+              <div className="ag-theme-alpine" style={{ height: 'calc(100vh - 200px)', width: '520px' }}>
+                <AgGridReact<PathData>
+                  rowData={plotData.paths as PathData[]}
+                  columnDefs={columnDefs}
+                  defaultColDef={defaultColDef}
+                  rowHeight={100}
+                  headerHeight={48}
+                  animateRows={true}
+                  domLayout="normal"
+                />
+              </div>
             </div>
           )}
         </div>

@@ -495,18 +495,6 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="1"
-                        step="0.1"
-                        value={upperOpacity}
-                        onChange={(e) => setUpperOpacity(parseFloat(e.target.value))}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
-                      />
-                    </div>
-                    <div>
                       <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Min</label>
                       <input
                         type="number"
@@ -526,6 +514,18 @@ export default function CPDViewerPage() {
                         className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
                       />
                     </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={upperOpacity}
+                      onChange={(e) => setUpperOpacity(parseFloat(e.target.value))}
+                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                    />
                   </div>
                 </div>
               </div>
@@ -600,18 +600,6 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
-                      <input
-                        type="number"
-                        min="0"
-                        max="1"
-                        step="0.1"
-                        value={lowerOpacity}
-                        onChange={(e) => setLowerOpacity(parseFloat(e.target.value))}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
-                      />
-                    </div>
-                    <div>
                       <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Min</label>
                       <input
                         type="number"
@@ -631,6 +619,18 @@ export default function CPDViewerPage() {
                         className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
                       />
                     </div>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={lowerOpacity}
+                      onChange={(e) => setLowerOpacity(parseFloat(e.target.value))}
+                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                    />
                   </div>
                 </div>
               </div>

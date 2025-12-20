@@ -123,12 +123,12 @@ export function visualizeLattice(instructionsStr: string, ss_vertices: number[][
   let match
   const instructions: Instruction[] = []
 
-  const hSpacing = 120
-  const vSpacing = 105
-  const circleRadius = 10
-  const svgWidth = hSpacing * 3 + 2 * circleRadius + 40
-  const svgHeight = vSpacing + 2 * circleRadius + 20
-  const circleStrokeWidth = 4
+  const hSpacing = 60
+  const vSpacing = 53
+  const circleRadius = 5
+  const svgWidth = hSpacing * 3 + 2 * circleRadius + 20
+  const svgHeight = vSpacing + 2 * circleRadius + 10
+  const circleStrokeWidth = 2
   const offsetX = -hSpacing + circleRadius + (svgWidth - 3 * hSpacing - 2 * circleRadius) / 2
   const offsetY = -vSpacing + circleRadius + (svgHeight - vSpacing - 2 * circleRadius) / 2
 
@@ -150,8 +150,8 @@ export function visualizeLattice(instructionsStr: string, ss_vertices: number[][
       .attr('viewBox', '0 -5 10 10')
       .attr('refX', 5)
       .attr('refY', 0)
-      .attr('markerWidth', 4)
-      .attr('markerHeight', 4)
+      .attr('markerWidth', 3)
+      .attr('markerHeight', 3)
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M0,-5L10,0L0,5')
@@ -248,8 +248,8 @@ export function visualizeLattice(instructionsStr: string, ss_vertices: number[][
     const from = instruction.from
     const to = instruction.to
 
-    const offsetDistanceFrom = circleRadius + 5
-    const offsetDistanceTo = circleRadius + 10
+    const offsetDistanceFrom = circleRadius + 3
+    const offsetDistanceTo = circleRadius + 5
     const fromX = (from.x_shifted ?? from.x) * hSpacing + offsetX
     const fromY = svgHeight - ((from.y_shifted ?? from.y) * vSpacing + offsetY)
     const toX = (to.x_shifted ?? to.x) * hSpacing + offsetX
@@ -278,7 +278,7 @@ export function visualizeLattice(instructionsStr: string, ss_vertices: number[][
         .attr('x2', adjustedToX)
         .attr('y2', adjustedToY)
         .attr('stroke', color)
-        .attr('stroke-width', '4')
+        .attr('stroke-width', '2')
         .attr('opacity', 0.8)
         .attr('marker-end', `url(#${arrowId})`)
     }
