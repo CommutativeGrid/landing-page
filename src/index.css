@@ -4,26 +4,48 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 95%;
+    --muted-foreground: 215 16% 42%;
+    --accent: 221 83% 96%;
+    --accent-foreground: 221 83% 33%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
+    --border: 214 32% 89%;
+    --input: 214 32% 89%;
+    --ring: 221 83% 53%;
+    --radius: 0.625rem;
+  }
+
+  .dark {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 96%;
+    --card: 222 40% 10%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 40% 10%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 9%;
+    --secondary: 217 33% 16%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 62%;
+    --accent: 217 40% 18%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 63% 45%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217 33% 20%;
+    --input: 217 33% 22%;
+    --ring: 217 91% 60%;
   }
 }
 
@@ -31,21 +53,60 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Scientific figures stay on a constant light "paper" surface in both
+     themes so plots and SVG diagrams remain legible. */
+  .figure-surface {
+    background-color: #ffffff;
+    color: #0f172a;
+    border: 1px solid rgb(226 232 240);
+  }
+  .dark .figure-surface {
+    border-color: rgb(51 65 85);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4);
+  }
+
+  .section-eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary;
+  }
+
+  /* Control-panel group header used in the CPD viewer side panel. */
+  .panel-section-title {
+    @apply flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.14em]
+           text-primary py-3 mb-4 border-b border-border;
+  }
+
+  .panel-label {
+    @apply text-[11px] uppercase tracking-wide text-muted-foreground;
+  }
+
+  .panel-input {
+    @apply w-full border border-input bg-background text-foreground rounded-md text-sm
+           px-3 transition-colors placeholder:text-muted-foreground/50
+           focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring;
   }
 }
 
 .publication-title {
-  font-family: 'Google Sans', sans-serif;
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
+  letter-spacing: -0.02em;
 }
 
 .publication-authors {
-  font-family: 'Google Sans', sans-serif;
+  font-family: 'Google Sans', 'Noto Sans', sans-serif;
 }
 
 .publication-authors a {
-  color: hsl(204, 86%, 53%);
+  @apply text-primary;
+  transition: color 0.15s ease;
 }
 
 .publication-authors a:hover {
@@ -56,14 +117,8 @@
   display: inline;
 }
 
-.gallery-item {
-  width: 440px;
-  height: 180px;
-  border: 2px solid #E5E7EB;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
+.prose-abstract {
+  font-family: 'Castoro', Georgia, serif;
 }
 
 .arrowHead {
