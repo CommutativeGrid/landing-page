@@ -169,6 +169,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           line: { color: color, width: lineWidth },
           hoverinfo: 'skip',
           showlegend: true,
+          legendgroup: 'connections',
           name: lineNameDisplay
         } as Data)
 
@@ -176,9 +177,10 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           x: hoverX,
           y: hoverY,
           mode: 'markers',
-          marker: { size: 1, opacity: 0 },
+          marker: { size: 10, color: 'rgba(0,0,0,0)' },
           text: hoverText,
           hoverinfo: 'text',
+          legendgroup: 'connections',
           showlegend: false
         } as Data)
       }
@@ -202,7 +204,11 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
       const hoverY: number[] = []
       const hoverText: string[] = []
 
-      for (const [weight, group] of weightGroups) {
+      const sortedWeights = Array.from(weightGroups.keys()).sort((a, b) => a - b)
+      let firstTrace = true
+
+      for (const weight of sortedWeights) {
+        const group = weightGroups.get(weight)!
         const normalizedWeight = weightRange > 0 ? (weight - minWeight) / weightRange : 0.5
         const lineColor = getSchemeColor(normalizedWeight, schemeName)
         const colorWithOpacity = lineColor.replace('rgb', 'rgba').replace(')', `, ${lineOpacity})`)
@@ -230,19 +236,22 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           mode: 'lines',
           line: { color: colorWithOpacity, width: lineWidth },
           hoverinfo: 'skip',
-          showlegend: false
+          legendgroup: 'connections',
+          showlegend: firstTrace,
+          name: firstTrace ? lineNameDisplay : undefined
         } as Data)
+        firstTrace = false
       }
 
       traces.push({
         x: hoverX,
         y: hoverY,
         mode: 'markers',
-        marker: { size: 1, opacity: 0 },
+        marker: { size: 10, color: 'rgba(0,0,0,0)' },
         text: hoverText,
         hoverinfo: 'text',
-        showlegend: true,
-        name: lineNameDisplay
+        legendgroup: 'connections',
+        showlegend: false
       } as Data)
     }
   }
@@ -372,6 +381,7 @@ export function createTraces(parsedData: ParsedCPDData, options: PlotOptions): D
           }
         },
         hoverinfo: 'skip',
+        legendgroup: 'connections',
         showlegend: false
       } as Data)
     }
