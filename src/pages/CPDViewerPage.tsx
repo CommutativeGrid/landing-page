@@ -64,12 +64,12 @@ export default function CPDViewerPage() {
   const [lowerLifetimeMax, setLowerLifetimeMax] = useState(0)
 
   const [lineColorMode, setLineColorMode] = useState<'single' | 'scale'>('scale')
-  const [lineSingleColor, setLineSingleColor] = useState('#888888')
-  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('YlOrRd')
+  const [lineSingleColor, setLineSingleColor] = useState('#9ca3af')
+  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('Greys')
   const [lineFilterMin, setLineFilterMin] = useState<string>('')
   const [lineFilterMax, setLineFilterMax] = useState<string>('')
-  const [lineOpacity, setLineOpacity] = useState(0.5)
-  const [lineWidth, setLineWidth] = useState(1)
+  const [lineOpacity, setLineOpacity] = useState(0.6)
+  const [lineWidth, setLineWidth] = useState(0.8)
 
   const getFilter = useCallback((minStr: string, maxStr: string): Filter => {
     const min = minStr === '' ? null : parseFloat(minStr)
