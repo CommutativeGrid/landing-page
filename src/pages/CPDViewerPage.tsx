@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import Plot from 'react-plotly.js'
 import Plotly from 'plotly.js-dist-min'
 import { DATA_SI100, DATA_O50, type CPDDataset } from '../data/cpd-data'
 import { parseData, type Filter } from '../lib/cpd/parse'
-import { ThemeToggle } from '@/components/ui/theme-toggle'
+import { SiteHeader } from '@/components/SiteHeader'
 import {
   createTraces,
   createLayout,
@@ -157,56 +156,49 @@ export default function CPDViewerPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="h-16 bg-background border-b border-border px-4 sm:px-6 flex items-center gap-3 sm:gap-4 fixed top-0 left-0 right-0 z-[300]">
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle controls"
-          className={`inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-            menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
-          }`}
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
+      <SiteHeader
+        leading={
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle controls"
+            className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors ${
+              menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
+            }`}
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        }
+      />
 
-        <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-            Λ
-          </span>
-          <span className="hidden font-semibold tracking-tight text-foreground sm:inline">
-            Ladder Invariants
-          </span>
-        </Link>
-
-        <span className="hidden h-6 w-px bg-border md:block" />
-        <h1 className="hidden text-sm font-medium text-muted-foreground md:block">
-          Connected Persistence Diagram Viewer
-        </h1>
-
-        <div className="ml-auto flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center gap-2">
-            <label className="hidden text-sm text-muted-foreground sm:inline">Dataset</label>
-            <select
-              value={dataset}
-              onChange={(e) => setDataset(e.target.value)}
-              className="panel-input h-9 w-auto"
-            >
-              <option value="SI100">SiO₂ - Si 100% deleted</option>
-              <option value="O50">SiO₂ - O 50% deleted</option>
-            </select>
-          </div>
-          <ThemeToggle />
-        </div>
-      </header>
-
-      <div className="flex pt-16">
+      <div className="flex">
         <div
-          className={`fixed left-0 top-16 w-[340px] h-[calc(100vh-64px)] bg-card border-r border-border shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
+          className={`fixed left-0 top-16 w-[340px] h-[calc(100vh-64px)] bg-card border-r border-border shadow-md z-40 overflow-y-auto transition-transform duration-300 ${
             menuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div className="p-5">
+            {/* Dataset Section */}
+            <div className="menu-section mb-6">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 5v14a9 3 0 0 0 18 0V5" />
+                  <path d="M3 12a9 3 0 0 0 18 0" />
+                </svg>
+                Dataset
+              </div>
+              <select
+                value={dataset}
+                onChange={(e) => setDataset(e.target.value)}
+                className="panel-input h-9"
+              >
+                <option value="SI100">SiO₂ - Si 100% deleted</option>
+                <option value="O50">SiO₂ - O 50% deleted</option>
+              </select>
+            </div>
+
             {/* Layout Section */}
             <div className="menu-section mb-6">
               <div className="panel-section-title">
