@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Github, FileText } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -9,12 +10,13 @@ const navLinks = [
   { to: '/cpd-viewer', label: 'CPD Viewer' },
 ]
 
-export function SiteHeader() {
+export function SiteHeader({ leading }: { leading?: ReactNode }) {
   const { pathname } = useLocation()
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
+        {leading}
         <Link to="/" className="flex items-center gap-2.5 shrink-0">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
             Λ
