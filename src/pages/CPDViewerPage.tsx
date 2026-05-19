@@ -5,6 +5,7 @@ import Plot from 'react-plotly.js'
 import Plotly from 'plotly.js-dist-min'
 import { DATA_SI100, DATA_O50, type CPDDataset } from '../data/cpd-data'
 import { parseData, type Filter } from '../lib/cpd/parse'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 import {
   createTraces,
   createLayout,
@@ -156,12 +157,12 @@ export default function CPDViewerPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="h-20 bg-white border-b border-gray-200 px-6 flex items-center fixed top-0 left-0 right-0 z-[300]">
+    <div className="min-h-screen bg-background">
+      <header className="h-20 bg-card border-b border-border px-6 flex items-center fixed top-0 left-0 right-0 z-[300]">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
           className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
-            menuOpen ? 'bg-blue-600 text-white' : 'bg-transparent text-gray-400 hover:bg-gray-100'
+            menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent'
           }`}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,43 +170,46 @@ export default function CPDViewerPage() {
           </svg>
         </button>
         <div className="flex items-center gap-4 flex-1 ml-4">
-          <h1 className="text-lg font-semibold text-gray-800">Connected Persistence Diagram Viewer</h1>
-          <span className="text-gray-400">|</span>
+          <h1 className="text-lg font-semibold text-foreground">Connected Persistence Diagram Viewer</h1>
+          <span className="text-border">|</span>
           <div className="flex items-center gap-2">
-            <label className="text-sm text-gray-600 font-medium">Dataset:</label>
+            <label className="text-sm text-muted-foreground font-medium">Dataset:</label>
             <select
               value={dataset}
               onChange={(e) => setDataset(e.target.value)}
-              className="h-9 px-3 border border-gray-200 rounded text-sm bg-white"
+              className="panel-input h-9 w-auto"
             >
               <option value="SI100">SiO₂ - Si 100% deleted</option>
               <option value="O50">SiO₂ - O 50% deleted</option>
             </select>
           </div>
         </div>
-        <Link to="/" className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
-          <Home className="h-5 w-5 text-gray-600" />
-        </Link>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <Link to="/" className="inline-flex h-9 w-9 items-center justify-center bg-card border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
+            <Home className="h-5 w-5 text-muted-foreground" />
+          </Link>
+        </div>
       </header>
 
       <div className="flex pt-20">
         <div
-          className={`fixed left-0 top-20 w-[340px] h-[calc(100vh-80px)] bg-white border-r border-gray-200 shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
+          className={`fixed left-0 top-20 w-[340px] h-[calc(100vh-80px)] bg-card border-r border-border shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
             menuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           <div className="p-5">
             {/* Layout Section */}
             <div className="menu-section mb-6">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <rect width="18" height="18" x="3" y="3" rx="2" />
                   <line x1="3" y1="21" x2="21" y2="3" />
                 </svg>
                 Layout
               </div>
               <div className="flex flex-col gap-2">
-                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all bg-white border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all bg-card border-border hover:border-primary/40 has-[:checked]:border-primary has-[:checked]:bg-accent">
                   <input
                     type="radio"
                     name="layout"
@@ -214,17 +218,17 @@ export default function CPDViewerPage() {
                     onChange={() => setLayoutMode('overlapping')}
                     className="sr-only"
                   />
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth={2} />
                     <circle cx="8" cy="16" r="2" fill="currentColor" />
                     <circle cx="16" cy="8" r="2" fill="currentColor" />
                   </svg>
                   <div>
-                    <div className="text-sm font-medium text-gray-700">Overlapping</div>
-                    <div className="text-xs text-gray-400">D1 and D2 on same axes</div>
+                    <div className="text-sm font-medium text-foreground">Overlapping</div>
+                    <div className="text-xs text-muted-foreground/70">D1 and D2 on same axes</div>
                   </div>
                 </label>
-                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all bg-white border-gray-200 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+                <label className="flex items-center gap-3 p-3 border-2 rounded-lg cursor-pointer transition-all bg-card border-border hover:border-primary/40 has-[:checked]:border-primary has-[:checked]:bg-accent">
                   <input
                     type="radio"
                     name="layout"
@@ -233,24 +237,24 @@ export default function CPDViewerPage() {
                     onChange={() => setLayoutMode('complementary')}
                     className="sr-only"
                   />
-                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth={2} />
                     <line x1="3" y1="21" x2="21" y2="3" strokeWidth={2} />
                     <circle cx="8" cy="16" r="2" fill="currentColor" />
                     <circle cx="16" cy="8" r="2" fill="currentColor" />
                   </svg>
                   <div>
-                    <div className="text-sm font-medium text-gray-700">Complementary</div>
-                    <div className="text-xs text-gray-400">D1 mirrored below diagonal</div>
+                    <div className="text-sm font-medium text-foreground">Complementary</div>
+                    <div className="text-xs text-muted-foreground/70">D1 mirrored below diagonal</div>
                   </div>
                 </label>
               </div>
             </div>
 
             {/* Display Options Section */}
-            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div className="menu-section mb-6 pt-6 border-t border-border">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="12" r="3" />
                   <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
                 </svg>
@@ -262,21 +266,21 @@ export default function CPDViewerPage() {
                     type="checkbox"
                     checked={showGrid}
                     onChange={(e) => setShowGrid(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
                   />
-                  <span className="text-sm text-gray-600">Show Grid</span>
+                  <span className="text-sm text-muted-foreground">Show Grid</span>
                 </label>
                 {showGrid && (
                   <div className="flex items-center gap-2 ml-6">
-                    <span className="text-xs text-gray-400">Step:</span>
+                    <span className="text-xs text-muted-foreground/70">Step:</span>
                     {[5, 10, 20].map((step) => (
                       <button
                         key={step}
                         onClick={() => setGridStep(step)}
                         className={`px-2 py-1 text-xs border rounded transition-all ${
                           gridStep === step
-                            ? 'bg-blue-500 border-blue-500 text-white'
-                            : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
+                            ? 'bg-primary border-primary text-primary-foreground'
+                            : 'bg-card border-input text-muted-foreground hover:bg-accent'
                         }`}
                       >
                         {step}
@@ -289,80 +293,80 @@ export default function CPDViewerPage() {
                     type="checkbox"
                     checked={showDiagonal}
                     onChange={(e) => setShowDiagonal(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
                   />
-                  <span className="text-sm text-gray-600">Show Diagonal</span>
+                  <span className="text-sm text-muted-foreground">Show Diagonal</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={showFrame}
                     onChange={(e) => setShowFrame(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
                   />
-                  <span className="text-sm text-gray-600">Show Frame</span>
+                  <span className="text-sm text-muted-foreground">Show Frame</span>
                 </label>
               </div>
             </div>
 
             {/* Labels Section */}
-            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div className="menu-section mb-6 pt-6 border-t border-border">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path d="M4 7V4h16v3M9 20h6M12 4v16" />
                 </svg>
                 Labels
               </div>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-gray-500 uppercase tracking-wide">Title</label>
+                  <label className="panel-label">Title</label>
                   <input
                     type="text"
                     value={plotTitle}
                     onChange={(e) => setPlotTitle(e.target.value)}
                     placeholder="Plot title"
-                    className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                    className="panel-input h-9 mt-1"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Top</label>
+                    <label className="panel-label">Top</label>
                     <input
                       type="text"
                       value={labelTop}
                       onChange={(e) => setLabelTop(e.target.value)}
                       placeholder="Top"
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
+                      className="panel-input h-9 mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Bottom</label>
+                    <label className="panel-label">Bottom</label>
                     <input
                       type="text"
                       value={labelBottom}
                       onChange={(e) => setLabelBottom(e.target.value)}
                       placeholder="Bottom"
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
+                      className="panel-input h-9 mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Left</label>
+                    <label className="panel-label">Left</label>
                     <input
                       type="text"
                       value={labelLeft}
                       onChange={(e) => setLabelLeft(e.target.value)}
                       placeholder="Left"
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
+                      className="panel-input h-9 mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Right</label>
+                    <label className="panel-label">Right</label>
                     <input
                       type="text"
                       value={labelRight}
                       onChange={(e) => setLabelRight(e.target.value)}
                       placeholder="Right"
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1 placeholder:text-gray-300"
+                      className="panel-input h-9 mt-1"
                     />
                   </div>
                 </div>
@@ -370,9 +374,9 @@ export default function CPDViewerPage() {
             </div>
 
             {/* Points Section */}
-            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div className="menu-section mb-6 pt-6 border-t border-border">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <circle cx="12" cy="12" r="4" />
                   <circle cx="4" cy="4" r="2" />
                   <circle cx="20" cy="20" r="2" />
@@ -386,17 +390,17 @@ export default function CPDViewerPage() {
                     type="checkbox"
                     checked={sameColorscale}
                     onChange={(e) => setSameColorscale(e.target.checked)}
-                    className="w-4 h-4 rounded border-gray-300 text-blue-500 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
                   />
-                  <span className="text-sm text-gray-600">Same colorscale for both</span>
+                  <span className="text-sm text-muted-foreground">Same colorscale for both</span>
                 </label>
                 {sameColorscale && (
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Shared Colorscale</label>
+                    <label className="panel-label">Shared Colorscale</label>
                     <select
                       value={sharedColorscale}
                       onChange={(e) => setSharedColorscale(e.target.value as ColorscaleName)}
-                      className="w-full h-9 px-3 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-9 mt-1"
                     >
                       {COLORSCALE_OPTIONS.map((cs) => (
                         <option key={cs} value={cs}>{cs}</option>
@@ -411,7 +415,7 @@ export default function CPDViewerPage() {
               </div>
 
               <div className="mb-3">
-                <label className="text-xs text-gray-500 uppercase tracking-wide">Point Size</label>
+                <label className="panel-label">Point Size</label>
                 <div className="flex items-center gap-3 mt-1">
                   <input
                     type="range"
@@ -421,33 +425,33 @@ export default function CPDViewerPage() {
                     onChange={(e) => setPointSize(parseInt(e.target.value))}
                     className="flex-1"
                   />
-                  <span className="text-sm text-gray-600 w-8">{pointSize}</span>
+                  <span className="text-sm text-muted-foreground w-8">{pointSize}</span>
                 </div>
               </div>
 
               {/* Upper Diagram Subsection */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-sm bg-blue-800"></span>
+              <div className="bg-muted/50 rounded-lg p-4 mb-4">
+                <div className="text-xs font-semibold text-foreground mb-3 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-sm bg-primary"></span>
                   Upper Diagram (D₂)
                 </div>
                 <div className="space-y-2">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Name</label>
+                    <label className="panel-label">Name</label>
                     <input
                       type="text"
                       value={upperName}
                       onChange={(e) => setUpperName(e.target.value)}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                   {!sameColorscale && (
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Colorscale</label>
+                      <label className="panel-label">Colorscale</label>
                       <select
                         value={upperColorscale}
                         onChange={(e) => setUpperColorscale(e.target.value as ColorscaleName)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       >
                         {COLORSCALE_OPTIONS.map((cs) => (
                           <option key={cs} value={cs}>{cs}</option>
@@ -460,11 +464,11 @@ export default function CPDViewerPage() {
                     </div>
                   )}
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Shape</label>
+                    <label className="panel-label">Shape</label>
                     <select
                       value={upperShape}
                       onChange={(e) => setUpperShape(e.target.value)}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     >
                       {MARKER_SHAPES.map((shape) => (
                         <option key={shape.value} value={shape.value}>{shape.label}</option>
@@ -473,50 +477,50 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
+                      <label className="panel-label">Multiplicity Min</label>
                       <input
                         type="number"
                         value={upperFilterMin}
                         onChange={(e) => setUpperFilterMin(e.target.value)}
                         placeholder="Min"
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
+                      <label className="panel-label">Multiplicity Max</label>
                       <input
                         type="number"
                         value={upperFilterMax}
                         onChange={(e) => setUpperFilterMax(e.target.value)}
                         placeholder="Max"
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Min</label>
+                      <label className="panel-label">Lifetime Min</label>
                       <input
                         type="number"
                         min="0"
                         value={upperLifetimeMin}
                         onChange={(e) => setUpperLifetimeMin(parseFloat(e.target.value) || 0)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Max</label>
+                      <label className="panel-label">Lifetime Max</label>
                       <input
                         type="number"
                         min="0"
                         value={upperLifetimeMax}
                         onChange={(e) => setUpperLifetimeMax(parseFloat(e.target.value) || 0)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
+                    <label className="panel-label">Opacity</label>
                     <input
                       type="number"
                       min="0"
@@ -524,35 +528,35 @@ export default function CPDViewerPage() {
                       step="0.1"
                       value={upperOpacity}
                       onChange={(e) => setUpperOpacity(parseFloat(e.target.value))}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Lower Diagram Subsection */}
-              <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                <div className="text-xs font-semibold text-gray-600 mb-3 flex items-center gap-1.5">
+              <div className="bg-muted/50 rounded-lg p-4 mb-4">
+                <div className="text-xs font-semibold text-foreground mb-3 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-sm bg-red-600"></span>
                   Lower Diagram (D₁)
                 </div>
                 <div className="space-y-2">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Name</label>
+                    <label className="panel-label">Name</label>
                     <input
                       type="text"
                       value={lowerName}
                       onChange={(e) => setLowerName(e.target.value)}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                   {!sameColorscale && (
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Colorscale</label>
+                      <label className="panel-label">Colorscale</label>
                       <select
                         value={lowerColorscale}
                         onChange={(e) => setLowerColorscale(e.target.value as ColorscaleName)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       >
                         {COLORSCALE_OPTIONS.map((cs) => (
                           <option key={cs} value={cs}>{cs}</option>
@@ -565,11 +569,11 @@ export default function CPDViewerPage() {
                     </div>
                   )}
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Shape</label>
+                    <label className="panel-label">Shape</label>
                     <select
                       value={lowerShape}
                       onChange={(e) => setLowerShape(e.target.value)}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     >
                       {MARKER_SHAPES.map((shape) => (
                         <option key={shape.value} value={shape.value}>{shape.label}</option>
@@ -578,50 +582,50 @@ export default function CPDViewerPage() {
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
+                      <label className="panel-label">Multiplicity Min</label>
                       <input
                         type="number"
                         value={lowerFilterMin}
                         onChange={(e) => setLowerFilterMin(e.target.value)}
                         placeholder="Min"
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
+                      <label className="panel-label">Multiplicity Max</label>
                       <input
                         type="number"
                         value={lowerFilterMax}
                         onChange={(e) => setLowerFilterMax(e.target.value)}
                         placeholder="Max"
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Min</label>
+                      <label className="panel-label">Lifetime Min</label>
                       <input
                         type="number"
                         min="0"
                         value={lowerLifetimeMin}
                         onChange={(e) => setLowerLifetimeMin(parseFloat(e.target.value) || 0)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500 uppercase tracking-wide">Lifetime Max</label>
+                      <label className="panel-label">Lifetime Max</label>
                       <input
                         type="number"
                         min="0"
                         value={lowerLifetimeMax}
                         onChange={(e) => setLowerLifetimeMax(parseFloat(e.target.value) || 0)}
-                        className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                        className="panel-input h-8 mt-1"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
+                    <label className="panel-label">Opacity</label>
                     <input
                       type="number"
                       min="0"
@@ -629,7 +633,7 @@ export default function CPDViewerPage() {
                       step="0.1"
                       value={lowerOpacity}
                       onChange={(e) => setLowerOpacity(parseFloat(e.target.value))}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                 </div>
@@ -637,9 +641,9 @@ export default function CPDViewerPage() {
             </div>
 
             {/* Connections Section */}
-            <div className="menu-section mb-6 pt-6 border-t-2 border-gray-300">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div className="menu-section mb-6 pt-6 border-t border-border">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path d="M4 20L20 4" />
                   <circle cx="4" cy="20" r="2" />
                   <circle cx="20" cy="4" r="2" />
@@ -648,16 +652,16 @@ export default function CPDViewerPage() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <label className="text-xs text-gray-500 uppercase tracking-wide">Name</label>
+                  <label className="panel-label">Name</label>
                   <input
                     type="text"
                     value={lineName}
                     onChange={(e) => setLineName(e.target.value)}
-                    className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                    className="panel-input h-8 mt-1"
                   />
                 </div>
                 <div>
-                  <label className="text-xs text-gray-500 uppercase tracking-wide">Color Mode</label>
+                  <label className="panel-label">Color Mode</label>
                   <div className="flex gap-2 mt-1">
                     <label className="flex items-center gap-1 cursor-pointer">
                       <input
@@ -668,7 +672,7 @@ export default function CPDViewerPage() {
                         onChange={() => setLineColorMode('scale')}
                         className="w-3 h-3"
                       />
-                      <span className="text-sm text-gray-600">Colorscale</span>
+                      <span className="text-sm text-muted-foreground">Colorscale</span>
                     </label>
                     <label className="flex items-center gap-1 cursor-pointer">
                       <input
@@ -679,13 +683,13 @@ export default function CPDViewerPage() {
                         onChange={() => setLineColorMode('single')}
                         className="w-3 h-3"
                       />
-                      <span className="text-sm text-gray-600">Single</span>
+                      <span className="text-sm text-muted-foreground">Single</span>
                     </label>
                   </div>
                 </div>
                 {lineColorMode === 'single' ? (
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Color</label>
+                    <label className="panel-label">Color</label>
                     <input
                       type="color"
                       value={lineSingleColor}
@@ -695,11 +699,11 @@ export default function CPDViewerPage() {
                   </div>
                 ) : (
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Colorscale</label>
+                    <label className="panel-label">Colorscale</label>
                     <select
                       value={lineColorscale}
                       onChange={(e) => setLineColorscale(e.target.value as ColorscaleName)}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     >
                       {COLORSCALE_OPTIONS.map((cs) => (
                         <option key={cs} value={cs}>{cs}</option>
@@ -713,29 +717,29 @@ export default function CPDViewerPage() {
                 )}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Min</label>
+                    <label className="panel-label">Multiplicity Min</label>
                     <input
                       type="number"
                       value={lineFilterMin}
                       onChange={(e) => setLineFilterMin(e.target.value)}
                       placeholder="Min"
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Multiplicity Max</label>
+                    <label className="panel-label">Multiplicity Max</label>
                     <input
                       type="number"
                       value={lineFilterMax}
                       onChange={(e) => setLineFilterMax(e.target.value)}
                       placeholder="Max"
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Opacity</label>
+                    <label className="panel-label">Opacity</label>
                     <input
                       type="number"
                       min="0"
@@ -743,11 +747,11 @@ export default function CPDViewerPage() {
                       step="0.1"
                       value={lineOpacity}
                       onChange={(e) => setLineOpacity(parseFloat(e.target.value))}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-gray-500 uppercase tracking-wide">Width</label>
+                    <label className="panel-label">Width</label>
                     <input
                       type="number"
                       min="0.5"
@@ -755,7 +759,7 @@ export default function CPDViewerPage() {
                       step="0.5"
                       value={lineWidth}
                       onChange={(e) => setLineWidth(parseFloat(e.target.value))}
-                      className="w-full h-8 px-2 border border-gray-200 rounded text-sm mt-1"
+                      className="panel-input h-8 mt-1"
                     />
                   </div>
                 </div>
@@ -763,9 +767,9 @@ export default function CPDViewerPage() {
             </div>
 
             {/* Export Section */}
-            <div className="menu-section pt-6 border-t-2 border-gray-300">
-              <div className="flex items-center gap-3 text-xs font-bold text-white -mx-5 mb-5 py-3.5 px-5 pl-[18px] bg-gradient-to-r from-blue-600 to-blue-500 uppercase tracking-wider shadow-sm">
-                <svg className="w-4 h-4 text-white/90 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <div className="menu-section pt-6 border-t border-border">
+              <div className="panel-section-title">
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="7 10 12 15 17 10" />
                   <line x1="12" y1="15" x2="12" y2="3" />
@@ -775,13 +779,13 @@ export default function CPDViewerPage() {
               <div className="flex gap-2">
                 <button
                   onClick={handleExportSVG}
-                  className="flex-1 px-4 py-2 bg-white border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-2 bg-card border border-input rounded-md text-sm font-medium text-foreground hover:bg-accent transition-colors"
                 >
                   Export SVG
                 </button>
                 <button
                   onClick={handleExportPNG}
-                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded text-sm font-medium hover:bg-blue-600 transition-colors"
+                  className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   Export PNG
                 </button>
@@ -793,7 +797,7 @@ export default function CPDViewerPage() {
         <main
           className={`flex-1 p-5 transition-all duration-300 ${menuOpen ? 'ml-[340px]' : 'ml-0'}`}
         >
-          <div className="bg-white rounded-lg shadow p-5 h-[calc(100vh-120px)]">
+          <div className="figure-surface rounded-xl shadow-sm p-5 h-[calc(100vh-120px)]">
             <div ref={plotRef} className="w-full h-full">
               <Plot
                 divId="cpd-plot"
