@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { Home } from 'lucide-react'
 import Plot from 'react-plotly.js'
 import Plotly from 'plotly.js-dist-min'
 import { DATA_SI100, DATA_O50, type CPDDataset } from '../data/cpd-data'
@@ -66,7 +65,7 @@ export default function CPDViewerPage() {
 
   const [lineColorMode, setLineColorMode] = useState<'single' | 'scale'>('scale')
   const [lineSingleColor, setLineSingleColor] = useState('#9ca3af')
-  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('Greys')
+  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('YlOrRd')
   const [lineFilterMin, setLineFilterMin] = useState<string>('')
   const [lineFilterMax, setLineFilterMax] = useState<string>('')
   const [lineOpacity, setLineOpacity] = useState(0.6)
@@ -158,22 +157,36 @@ export default function CPDViewerPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="h-20 bg-card border-b border-border px-6 flex items-center fixed top-0 left-0 right-0 z-[300]">
+      <header className="h-16 bg-background border-b border-border px-4 sm:px-6 flex items-center gap-3 sm:gap-4 fixed top-0 left-0 right-0 z-[300]">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${
-            menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent'
+          aria-label="Toggle controls"
+          className={`inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+            menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
           }`}
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <div className="flex items-center gap-4 flex-1 ml-4">
-          <h1 className="text-lg font-semibold text-foreground">Connected Persistence Diagram Viewer</h1>
-          <span className="text-border">|</span>
+
+        <Link to="/" className="flex items-center gap-2.5 shrink-0">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
+            Λ
+          </span>
+          <span className="hidden font-semibold tracking-tight text-foreground sm:inline">
+            Ladder Invariants
+          </span>
+        </Link>
+
+        <span className="hidden h-6 w-px bg-border md:block" />
+        <h1 className="hidden text-sm font-medium text-muted-foreground md:block">
+          Connected Persistence Diagram Viewer
+        </h1>
+
+        <div className="ml-auto flex items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2">
-            <label className="text-sm text-muted-foreground font-medium">Dataset:</label>
+            <label className="hidden text-sm text-muted-foreground sm:inline">Dataset</label>
             <select
               value={dataset}
               onChange={(e) => setDataset(e.target.value)}
@@ -183,18 +196,13 @@ export default function CPDViewerPage() {
               <option value="O50">SiO₂ - O 50% deleted</option>
             </select>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Link to="/" className="inline-flex h-9 w-9 items-center justify-center bg-card border border-border rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors">
-            <Home className="h-5 w-5 text-muted-foreground" />
-          </Link>
         </div>
       </header>
 
-      <div className="flex pt-20">
+      <div className="flex pt-16">
         <div
-          className={`fixed left-0 top-20 w-[340px] h-[calc(100vh-80px)] bg-card border-r border-border shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
+          className={`fixed left-0 top-16 w-[340px] h-[calc(100vh-64px)] bg-card border-r border-border shadow-md z-50 overflow-y-auto transition-transform duration-300 ${
             menuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
@@ -797,7 +805,7 @@ export default function CPDViewerPage() {
         <main
           className={`flex-1 p-5 transition-all duration-300 ${menuOpen ? 'ml-[340px]' : 'ml-0'}`}
         >
-          <div className="figure-surface rounded-xl shadow-sm p-5 h-[calc(100vh-120px)]">
+          <div className="figure-surface rounded-xl shadow-sm p-5 h-[calc(100vh-104px)]">
             <div ref={plotRef} className="w-full h-full">
               <Plot
                 divId="cpd-plot"
