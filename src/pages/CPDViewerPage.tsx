@@ -66,7 +66,7 @@ export default function CPDViewerPage() {
 
   const [lineColorMode, setLineColorMode] = useState<'single' | 'scale'>('scale')
   const [lineSingleColor, setLineSingleColor] = useState('#9ca3af')
-  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('Greys')
+  const [lineColorscale, setLineColorscale] = useState<ColorscaleName>('YlOrRd')
   const [lineFilterMin, setLineFilterMin] = useState<string>('')
   const [lineFilterMax, setLineFilterMax] = useState<string>('')
   const [lineOpacity, setLineOpacity] = useState(0.6)
