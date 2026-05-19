@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { SiteHeader } from '@/components/SiteHeader'
-import { SiteFooter } from '@/components/SiteFooter'
 import { Github, FileText, ArrowRight, Network, Grid3x3 } from 'lucide-react'
 
 const authors = [
@@ -47,9 +46,6 @@ export default function HomePage() {
             }}
           />
           <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
-            <span className="section-eyebrow mb-6">
-              Topological Data Analysis
-            </span>
             <h1 className="publication-title mb-6 text-4xl font-bold leading-tight text-foreground md:text-5xl">
               Refinement of Interval Approximations for Fully Commutative Quivers
             </h1>
@@ -145,8 +141,6 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-
-      <SiteFooter />
     </div>
   )
 }
