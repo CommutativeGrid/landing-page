@@ -15,15 +15,13 @@ export function SiteHeader({ leading }: { leading?: ReactNode }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
+      {leading}
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        {leading}
-        <Link to="/" className="flex items-center gap-2.5 shrink-0">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold">
-            Λ
-          </span>
-          <span className="hidden font-semibold tracking-tight text-foreground sm:inline">
-            Ladder Invariants
-          </span>
+        <Link
+          to="/"
+          className="shrink-0 font-semibold tracking-tight text-foreground"
+        >
+          Ladder Invariants
         </Link>
 
         <nav className="ml-2 flex items-center gap-1">
