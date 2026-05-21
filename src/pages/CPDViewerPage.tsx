@@ -161,7 +161,7 @@ export default function CPDViewerPage() {
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle controls"
-            className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors ${
+            className={`absolute left-3 top-1/2 z-10 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
               menuOpen ? 'bg-primary text-primary-foreground' : 'bg-transparent text-muted-foreground hover:bg-accent hover:text-foreground'
             }`}
           >

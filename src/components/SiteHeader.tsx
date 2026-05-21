@@ -15,8 +15,8 @@ export function SiteHeader({ leading }: { leading?: ReactNode }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background">
+      {leading}
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        {leading}
         <Link
           to="/"
           className="shrink-0 font-semibold tracking-tight text-foreground"
