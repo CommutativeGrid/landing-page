@@ -71,7 +71,7 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                 >
                   <FileText className="mr-2 h-4 w-4" />
-                  Read the Paper
+                  Paper
                 </a>
               </Button>
               <Button asChild variant="outline" className="rounded-full">
@@ -81,7 +81,7 @@ export default function HomePage() {
                   rel="noopener noreferrer"
                 >
                   <Github className="mr-2 h-4 w-4" />
-                  View Code
+                  Code
                 </a>
               </Button>
             </div>
